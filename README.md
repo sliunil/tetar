@@ -1,1 +1,1 @@
-# TETAR : Textual Entropy Analysis and Exploration
+# TETAR: Textual Entropy Analysis and Exploration
