@@ -5,45 +5,12 @@ from pathlib import Path
 import random
 import re
 
-
-def main():
-    """Main program."""
-
-    # Parameters...
-    subsample_len = 50
-    num_subsamples = 1000
-    test_data_path = Path("./data/test")
-    
-    # Open and read test files...
-    file_name_to_content = {file_path.name: file_path.read_text(encoding="UTF-8")
-                            for file_path in test_data_path.iterdir()}
-    
-    # Process each test file...
-    for file_name, content in file_name_to_content.items():
-        
-        print(f"{'='*80}\nFile {file_name}")
-
-        # Tokenize file content.
-        sample = tokenize(content)
-        print(f"Length: {len(sample)} tokens")
-        
-        # Compute and display sample entropy.
-        print(f"Sample entropy: {sample_entropy(sample):.3f}")
-        
-        # Compute and display subsample entropy (random and window).
-        print(f"Subsample entropy ({subsample_len} tokens):")
-        average, stdev = subsample_entropy(sample, subsample_len)
-        print(f"- random subsampling: {average:.3f}",
-              f"(SD: {stdev:.3f}), n={num_subsamples}")
-        average, stdev = subsample_entropy(sample, subsample_len, mode="window")
-        print(f"- moving average: {average:.3f}",
-              f"(SD: {stdev:.3f}), n={len(sample)-subsample_len+1}")
-
+__version__ = 0.1
 
 def tokenize(my_string, token_regex=r"\w+"):
     """Tokenize string into list of tokens based on regex describing tokens."""
     return re.findall(token_regex, my_string)
-    
+
 def sample_entropy(sample, base=2):
     """Compute sample entropy based on a list of items."""
     if len(sample) == 0:
@@ -62,27 +29,27 @@ def counter_to_sample_entropy(counter, base=2):
             weighted_sum_of_logs += freq * math.log(freq, base)
     return math.log(my_sum, base) - weighted_sum_of_logs/my_sum
 
-def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random", 
+def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
                       base=2):
     """Compute subsample entropy (and standard deviation) based on a sample."""
     sample_len = len(sample)
-     
+
     # Raise exception if subsample length > sample length...
     if subsample_len > sample_len:
-        raise ValueError("Subsample length must be less than or equal to " 
+        raise ValueError("Subsample length must be less than or equal to "
                          "sample length.")
-        
-    # Raise exception if subsample length <= 0...    
+
+    # Raise exception if subsample length <= 0...
     elif sample_len <= 0:
         raise ValueError("Subsample length must be greater than 0.")
-    
+
     # Return entropy of sample is subsample length = sample length...
     elif subsample_len == sample_len:
         return sample_entropy(sample, base), 0
-        
+
     # If 0 < subsample length < sample length, compute subsample entropy...
     my_sum = sum_of_squares = 0
-    
+
     # Random subsampling...
     if mode == "random":
         my_num_subsamples = num_subsamples
@@ -91,7 +58,7 @@ def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
                                      base)
             my_sum += entropy
             sum_of_squares += entropy**2
-    
+
     # Sliding window (NB: arg num_samples is overriden)...
     elif mode == "window":
         my_num_subsamples = sample_len-subsample_len+1
@@ -104,7 +71,7 @@ def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
 
         # For each consecutive window...
         for pos in range(sample_len-subsample_len):
-        
+
             # Update counter...
             counter[sample[pos]] -= 1
             counter[sample[pos+subsample_len]] += 1
@@ -116,7 +83,7 @@ def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
 
     # Compute and return average entropy and standard deviation...
     average = my_sum/my_num_subsamples
-    standard_deviation = sum_of_squares/my_num_subsamples - average**2  
+    standard_deviation = sum_of_squares/my_num_subsamples - average**2
     return average, standard_deviation
 
 def get_random_subsample(sample, subsample_len):
@@ -128,6 +95,23 @@ def get_random_subsample(sample, subsample_len):
     subsample = [sample[i] for i in sorted(indices[:subsample_len])]
     return subsample
 
+def import_taaled_silently():
+    """Import taaled without displaying annoying messages (based on
+    https://stackoverflow.com/questions/60324614/suppress-output-on-library-import-in-python
+    """
+    import io
+    import sys
+    text_trap = io.StringIO()
+    sys.stdout = text_trap
+    from taaled import ld
+    sys.stdout = sys.__stdout__
+    return ld
+
+LD_OBJECT = import_taaled_silently().lexdiv()
+
+def MTLD(sample):
+    """Wrapper for the MTLD method in taaled."""
+    return LD_OBJECT.MTLD(sample)
 
 if __name__ == "__main__":
     main()
