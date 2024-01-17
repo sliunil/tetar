@@ -6,6 +6,7 @@ import random
 import re
 
 __version__ = 0.1
+__authors__ = ["aris.xanthos@unil.ch"]
 
 def tokenize(my_string, token_regex=r"\w+"):
     """Tokenize string into list of tokens based on regex describing tokens."""
@@ -112,6 +113,3 @@ LD_OBJECT = import_taaled_silently().lexdiv()
 def MTLD(sample):
     """Wrapper for the MTLD method in taaled."""
     return LD_OBJECT.MTLD(sample)
-
-if __name__ == "__main__":
-    main()

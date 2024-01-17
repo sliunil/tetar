@@ -7,6 +7,7 @@ from LTTL.Utils import get_expected_subsample_variety
 from lexical_diversity import tokenize, sample_entropy, subsample_entropy, MTLD
 
 __version__ = 0.1
+__authors__ = ["aris.xanthos@unil.ch"]
 
 def main():
     """Main program."""
