@@ -1,12 +1,13 @@
-
 from collections import Counter
 import math
 from pathlib import Path
 import random
 import re
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
-__version__ = 0.1
-__authors__ = ["aris.xanthos@unil.ch"]
+__version__ = 0.2
+__authors__ = ["aris.xanthos@unil.ch", "guillaume.guex@unil.ch"]
 
 def tokenize(my_string, token_regex=r"\w+"):
     """Tokenize string into list of tokens based on regex describing tokens."""
@@ -113,3 +114,23 @@ LD_OBJECT = import_taaled_silently().lexdiv()
 def MTLD(sample):
     """Wrapper for the MTLD method in taaled."""
     return LD_OBJECT.MTLD(sample)
+
+def counter_to_zipf_data(counter):
+    """Compute zipf data from a counter: give log of ranks, 
+    log of frequencies, estimated intercept and slope"""
+    
+    # Get the frequencies
+    frequencies = list(counter.values())
+    frequencies.sort(reverse=True)
+
+    # Compute log_rank and log_freq 
+    log_rank = np.log(list(range(1, len(frequencies) + 1)))
+    log_freq = np.log(frequencies)
+        
+    # Linear regression model 
+    lm_model = LinearRegression()
+    lm_model.fit(log_rank.reshape(-1, 1), log_freq)
+    
+    return log_rank, log_freq, lm_model.intercept_, lm_model.coef_[0]
+    
+    

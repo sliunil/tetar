@@ -8,3 +8,4 @@ taaled==0.32
 matplotlib==3.8.2
 scikit-learn==1.4.0
 pandas==2.2.0
+pyarrow==15.0.0
