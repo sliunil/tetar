@@ -1,5 +1,5 @@
 - removed gutenberg headers and footers.
-- removed table of contents and glossary.
-- removed any notes not written by the author.
-- removed page and line numbers.
-- if missing, added the title of the book on the first lines
+- removed table of contents, glossary and appendices.
+- removed anything not written by the author (notes, preface, etc.).
+- if possible, removed page and line numbers.
+- if missing, added the title of the book on the first line.
