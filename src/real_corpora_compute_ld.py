@@ -43,9 +43,8 @@ subfolder_names = os.listdir(corpora_folder_path)
 for subfolder_name in subfolder_names:
     
     # Print status
-    print("==========================")
-    print(f"Folder : {subfolder_name}")
-    
+    print("="*80)
+    print(f"Folder: {subfolder_name}")
 
     # Get files
     file_names = os.listdir(f"{corpora_folder_path}/{subfolder_name}")
@@ -53,7 +52,7 @@ for subfolder_name in subfolder_names:
     for file_name in file_names:
         
         # Print status
-        print(f"File : {file_name}")
+        print(f"File: {file_name}")
 
         with open(f"{corpora_folder_path}/{subfolder_name}/{file_name}") as file:
             content = file.read()
@@ -61,9 +60,9 @@ for subfolder_name in subfolder_names:
         # Compute results
         sample = tokenize(content.lower())
         counter = Counter(sample)
-        m_entrpy_rdm, sd_entrpy_rdm = subsample_entropy(sample, subsample_len)
+        m_entrpy_rdm, sd_entrpy_rdm = subsample_entropy(sample, subsample_len, num_subsamples)
         m_entrpy_mav, sd_entrpy_mav = \
-            subsample_entropy(sample, subsample_len, mode="window")
+            subsample_entropy(sample, subsample_len, num_subsamples, mode="window")
         _, _, z_intercept, z_slope = counter_to_zipf_data(counter)
         
         # Store results 
@@ -84,6 +83,3 @@ for subfolder_name in subfolder_names:
         
 # Save dataset 
 results_df.to_csv(f"{results_folder_path}/real_corpora_indices_{subsample_len}_{num_subsamples}.csv")
-
-
-
