@@ -1,7 +1,7 @@
 import re
 
-input_file_path = "../raw/poetry/GeoffreyChaucer_TheCanterburyTales.txt"
-output_file_path = "poetry/GeoffreyChaucer_TheCanterburyTales_pre.txt"
+input_file_path = "poetry/GeoffreyChaucer_TheCanterburyTales.txt"
+output_file_path = "../clean/poetry/GeoffreyChaucer_TheCanterburyTales_pre.txt"
 
 with open(input_file_path) as file:
     lines = file.readlines()
