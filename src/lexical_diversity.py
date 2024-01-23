@@ -23,13 +23,18 @@ def counter_to_sample_entropy(counter, base=2):
     """Compute sample entropy based on a Counter."""
     if len(counter) == 0:
         raise ValueError("Can't compute sample entropy with empty Counter.")
-    my_sum = 0
-    weighted_sum_of_logs = 0
-    for freq in counter.values():
-        if freq:
-            my_sum += freq
-            weighted_sum_of_logs += freq * math.log(freq, base)
-    return math.log(my_sum, base) - weighted_sum_of_logs/my_sum
+    # my_sum = 0
+    # weighted_sum_of_logs = 0
+    # for freq in counter.values():
+    #     if freq:
+    #         my_sum += freq
+    #         weighted_sum_of_logs += freq * math.log(freq, base)
+    # return math.log(my_sum, base) - weighted_sum_of_logs/my_sum
+    np_freqs = np.array(list(counter.values()))
+    np_freqs = np_freqs[np_freqs > 0]
+    np_sum = np.sum(np_freqs)
+    return np.emath.logn(base, np_sum) \
+        - np.sum(np_freqs * np.emath.logn(base, np_freqs))/np_sum
 
 def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
                       base=2):
