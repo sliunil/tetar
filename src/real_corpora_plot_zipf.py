@@ -33,7 +33,8 @@ color_map = cm.get_cmap("hsv", len(subfolder_names) + 1)
 for grp_id, subfolder_name in enumerate(subfolder_names):
     
     # To store group caracteristics
-    grp_log_ranks, grp_log_freq = [], []
+    #grp_log_ranks, grp_log_freq = [], []
+    intercepts, slopes = [], []
 
     # Get files
     file_names = os.listdir(f"{corpora_folder_path}/{subfolder_name}")
@@ -49,16 +50,24 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
         log_rank, log_freq, _, _ = counter_to_zipf_data(counter)
         
         # Store for group slopes  
-        grp_log_ranks.extend(log_rank)
-        grp_log_freq.extend(log_freq)
+        # grp_log_ranks.extend(log_rank)
+        # grp_log_freq.extend(log_freq)
+        lm_model = LinearRegression()
+        lm_model.fit(log_rank.reshape(-1, 1), log_freq)
+        intercepts.append(lm_model.intercept_)
+        slopes.append(lm_model.coef_[0])
+        
+        
         
         # Plot the file
         plt.plot(log_rank, log_freq, alpha=0.5, linewidth=0.5, color=color_map(grp_id))
         
     # Linear regression model for the group
-    lm_model = LinearRegression()
-    lm_model.fit(np.array(grp_log_ranks).reshape(-1, 1), grp_log_freq)
-    plt.axline(xy1=(0, lm_model.intercept_), slope=lm_model.coef_[0], 
+    # lm_model = LinearRegression()
+    # lm_model.fit(np.array(grp_log_ranks).reshape(-1, 1), grp_log_freq)
+    # plt.axline(xy1=(0, lm_model.intercept_), slope=lm_model.coef_[0], 
+    #            color=color_map(grp_id), label=subfolder_name)
+    plt.axline(xy1=(0, np.mean(intercepts)), slope=np.mean(slopes), 
                color=color_map(grp_id), label=subfolder_name)
     plt.legend()
     
