@@ -72,4 +72,4 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
     plt.legend()
     
 # Save figure
-plt.savefig(f"{results_folder_path}/real_corpora_zipf_plot_test.png", dpi=1200)
+plt.savefig(f"{results_folder_path}/real_corpora_zipf_plot_mean.png", dpi=1200)
