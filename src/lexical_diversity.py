@@ -116,9 +116,9 @@ def import_taaled_silently():
 
 LD_OBJECT = import_taaled_silently().lexdiv()
 
-def MTLD(sample):
+def MTLD(sample, ttr_threshold=.72):
     """Wrapper for the MTLD method in taaled."""
-    return LD_OBJECT.MTLD(sample)
+    return LD_OBJECT.MTLD(sample, ttrval=ttr_threshold)
 
 def counter_to_zipf_data(counter):
     """Compute zipf data from a counter: give log of ranks, 

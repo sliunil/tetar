@@ -51,8 +51,9 @@ def main():
         print(f"Expected subsample variety "
               f"({subsample_len} tokens): {exp_variety:.3f}")
 
-       # Compute and display MTLD...
-        print(f"MTLD: {MTLD(sample):.3f}")
+       # Compute and display MTLD (standard and custom threshold)...
+        print(f"MTLD (std): {MTLD(sample):.3f}")
+        print(f"MTLD (threshold=0.6): {MTLD(sample, 0.6):.3f}")
 
 if __name__ == "__main__":
     main()
