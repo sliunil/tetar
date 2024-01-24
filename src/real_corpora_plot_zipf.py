@@ -57,8 +57,6 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
         intercepts.append(lm_model.intercept_)
         slopes.append(lm_model.coef_[0])
         
-        
-        
         # Plot the file
         plt.plot(log_rank, log_freq, alpha=0.5, linewidth=0.5, color=color_map(grp_id))
         
