@@ -4,9 +4,9 @@
 #SBATCH --mail-type ALL 
 #SBATCH --mail-user guillaume.guex@unil.ch
 
-#SBATCH --chdir ./ 
-#SBATCH --job-name segm_manifesto
-#SBATCH --output 3.2_segm_manifesto.out
+#SBATCH --chdir ../src/
+#SBATCH --job-name sample_size_compute
+#SBATCH --output sample_size_compute.out
 
 #SBATCH --partition cpu
 
@@ -17,8 +17,8 @@
 #SBATCH --time 24:00:00 
 #SBATCH --export NONE
 
-module load gcc/9.3.0 python/3.8.8
+module load gcc python
 
-source ~/SemSim_AutoCor/env/bin/activate
+source ~/tetar/.env/bin/activate
 
-python3 3.2_server.py
+python3 sample_size_compute_res.py
