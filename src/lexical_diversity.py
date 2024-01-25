@@ -13,6 +13,14 @@ def tokenize(my_string, token_regex=r"\w+"):
     """Tokenize string into list of tokens based on regex describing tokens."""
     return re.findall(token_regex, my_string)
 
+def draw_subsamble(sample, subsamble_size):
+    """Draw a subsamble from a sample, where token order is preserved"""
+    sample_size = len(sample)
+    if sample_size < subsamble_size:
+        raise ValueError("Can't draw a subsample larger than sample size")
+    subasample_start = random.randint(0, sample_size - subsamble_size)
+    return sample[subasample_start:(subasample_start + subsamble_size)]
+
 def sample_entropy(sample, base=2):
     """Compute sample entropy based on a list of items."""
     if len(sample) == 0:
