@@ -13,13 +13,13 @@ def tokenize(my_string, token_regex=r"\w+"):
     """Tokenize string into list of tokens based on regex describing tokens."""
     return re.findall(token_regex, my_string)
 
-def draw_subsamble(sample, subsamble_size):
+def draw_reduced_sample(sample, reduced_sample_size):
     """Draw a subsamble from a sample, where token order is preserved"""
     sample_size = len(sample)
-    if sample_size < subsamble_size:
+    if sample_size < reduced_sample_size:
         raise ValueError("Can't draw a subsample larger than sample size")
-    subasample_start = random.randint(0, sample_size - subsamble_size)
-    return sample[subasample_start:(subasample_start + subsamble_size)]
+    reduce_samble_start = random.randint(0, sample_size - reduced_sample_size)
+    return sample[reduce_samble_start:(reduce_samble_start + reduced_sample_size)]
 
 def sample_entropy(sample, base=2):
     """Compute sample entropy based on a list of items."""

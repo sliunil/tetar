@@ -45,7 +45,7 @@ for subfolder_name in subfolder_names:
     print("="*80)
     print(f"Folder: {subfolder_name}")
 
-    # Get files
+    # List the files
     file_names = os.listdir(f"{corpora_folder_path}/{subfolder_name}")
     for file_name in file_names:
         
