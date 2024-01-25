@@ -54,36 +54,34 @@ for subfolder_name in subfolder_names:
         with open(f"{corpora_folder_path}/{subfolder_name}/{file_name}") as input_file:
             content = input_file.read()
         sample = tokenize(content.lower())
-
-        # Open the file
-        with open(results_file_path, "a") as input_file:
             
-            # Loop on reduced sample sizes
-            for reduced_sample_size in reduced_sample_sizes:
+        # Loop on reduced sample sizes
+        for reduced_sample_size in reduced_sample_sizes:
+                
+            for id_draw in range(num_reduce_sample):
+                
+                # Draw reduced sample
+                reduced_sample = draw_reduced_sample(sample, reduced_sample_size)
+                
+                # Compute sample entropy
+                smple_entropy = sample_entropy(reduced_sample)
+                
+                for id_len, subsample_len in enumerate(subsample_lens):
                     
-                for id_draw in range(num_reduce_sample):
+                    # Compute ld measures
+                    subsample_entropy_rdm, _ = subsample_entropy(reduced_sample, 
+                                                                subsample_len, 
+                                                                num_subsamples)
+                    subsample_entropy_mav, _ = subsample_entropy(reduced_sample, 
+                                                                subsample_len, 
+                                                                num_subsamples,
+                                                                mode="window")
+                    exp_variety = get_expected_subsample_variety(Counter(reduced_sample), 
+                                                                subsample_len)
+                    mtld = MTLD(reduced_sample, mtld_thresholds[id_len])
                     
-                    # Draw reduced sample
-                    reduced_sample = draw_reduced_sample(sample, reduced_sample_size)
-                    
-                    # Compute sample entropy
-                    smple_entropy = sample_entropy(reduced_sample)
-                    
-                    for id_len, subsample_len in enumerate(subsample_lens):
-                        
-                        # Compute ld measures
-                        subsample_entropy_rdm, _ = subsample_entropy(reduced_sample, 
-                                                                    subsample_len, 
-                                                                    num_subsamples)
-                        subsample_entropy_mav, _ = subsample_entropy(reduced_sample, 
-                                                                    subsample_len, 
-                                                                    num_subsamples,
-                                                                    mode="window")
-                        exp_variety = get_expected_subsample_variety(Counter(reduced_sample), 
-                                                                    subsample_len)
-                        mtld = MTLD(reduced_sample, mtld_thresholds[id_len])
-                        
-                        # Write in file 
+                    # Write the result
+                    with open(results_file_path, "a") as input_file:
                         input_file.write(f"{subfolder_name},{file_name},{reduced_sample_size},{subsample_len},"
-                                         f"{mtld_thresholds[id_len]},{id_draw},{smple_entropy},"
-                                         f"{subsample_entropy_rdm},{subsample_entropy_mav},{exp_variety},{mtld}\n")
+                                        f"{mtld_thresholds[id_len]},{id_draw},{smple_entropy},"
+                                        f"{subsample_entropy_rdm},{subsample_entropy_mav},{exp_variety},{mtld}\n")
