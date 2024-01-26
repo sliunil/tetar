@@ -41,7 +41,8 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
 
     for file_name in file_names:
 
-        with open(f"{corpora_folder_path}/{subfolder_name}/{file_name}") as file:
+        with open(f"{corpora_folder_path}/{subfolder_name}/{file_name}") \
+            as file:
             content = file.read()
         
         # Compute results
@@ -58,7 +59,8 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
         slopes.append(lm_model.coef_[0])
         
         # Plot the file
-        plt.plot(log_rank, log_freq, alpha=0.5, linewidth=0.5, color=color_map(grp_id))
+        plt.plot(log_rank, log_freq, alpha=0.5, linewidth=0.5, 
+                 color=color_map(grp_id))
         
     # Linear regression model for the group
     # lm_model = LinearRegression()

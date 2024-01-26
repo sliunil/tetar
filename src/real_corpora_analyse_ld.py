@@ -29,7 +29,8 @@ num_data = ld_stat_df.drop(["name", "group"], axis=1)
 correlations_df = pd.DataFrame(np.corrcoef(num_data.to_numpy().T), 
                                columns=num_data.columns, 
                                index=num_data.columns)
-correlations_df.style.background_gradient(cmap="Reds").to_excel(output_cor_path)
+correlations_df.style.background_gradient(cmap="Reds").to_excel(
+    output_cor_path)
 
 # ---- Groups means
 

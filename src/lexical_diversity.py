@@ -19,7 +19,8 @@ def draw_reduced_sample(sample, reduced_sample_size):
     if sample_size < reduced_sample_size:
         raise ValueError("Can't draw a subsample larger than sample size")
     reduce_samble_start = random.randint(0, sample_size - reduced_sample_size)
-    return sample[reduce_samble_start:(reduce_samble_start + reduced_sample_size)]
+    return sample[reduce_samble_start:(reduce_samble_start + 
+                                       reduced_sample_size)]
 
 def sample_entropy(sample, base=2):
     """Compute sample entropy based on a list of items."""
@@ -44,8 +45,8 @@ def counter_to_sample_entropy(counter, base=2):
     return np.emath.logn(base, np_sum) \
         - np.sum(np_freqs * np.emath.logn(base, np_freqs))/np_sum
 
-def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
-                      base=2):
+def subsample_entropy(sample, subsample_len, num_subsamples=1000, 
+                      mode="random", base=2):
     """Compute subsample entropy (and standard deviation) based on a sample."""
     sample_len = len(sample)
 
@@ -69,7 +70,8 @@ def subsample_entropy(sample, subsample_len, num_subsamples=1000, mode="random",
     if mode == "random":
         my_num_subsamples = num_subsamples
         for _ in range(num_subsamples):
-            entropy = sample_entropy(get_random_subsample(sample, subsample_len),
+            entropy = sample_entropy(get_random_subsample(sample, 
+                                                          subsample_len),
                                      base)
             my_sum += entropy
             sum_of_squares += entropy**2
