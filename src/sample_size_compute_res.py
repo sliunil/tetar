@@ -13,7 +13,7 @@ corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
 results_folder_path = "../results"
 # File prefix 
-results_file_prefix = "sample_size_test"
+results_file_prefix = "sample_size"
 # Parameters
 reduced_sample_sizes = np.linspace(2000, 29000, 10).astype(int)
 num_reduce_sample = 10

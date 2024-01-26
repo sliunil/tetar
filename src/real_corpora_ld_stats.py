@@ -7,7 +7,7 @@ import numpy as np
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora_indices_5000_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_5000_10.csv"
 output_cor_path = "../results/real_corpora_correlation.xlsx"
 output_mean_path = "../results/real_corpora_group_mean.csv"
 
