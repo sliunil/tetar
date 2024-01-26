@@ -6,7 +6,7 @@
 
 #SBATCH --chdir ../src/
 #SBATCH --job-name sample_size_compute
-#SBATCH --output sample_size_compute.out
+#SBATCH --output ../server_files/sample_size_compute.out
 
 #SBATCH --partition cpu
 
