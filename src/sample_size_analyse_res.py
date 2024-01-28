@@ -45,12 +45,14 @@ genre_id = 0
 subsample_len = subsample_lens[0]
 subsample_len_id = 0
 
-# Restricted dataframe
-sample_size_df[(sample_size_df.genre == genre) &
-               (sample_size_df.subsample_len == subsample_len)]
+# Selected dataframe
+selected_df = sample_size_df[(sample_size_df.genre == genre) &
+                             (sample_size_df.subsample_len == subsample_len)]
 
 # Groupby mean and sd
-grpd_sample_size_df = sample_size_df.groupby(["reduced_sample_size"])
-measure_mean = grpd_sample_size_df[measure_name].mean()
-measure_std = grpd_sample_size_df[measure_name].std()
-n_tests = int(len(sample_size_df) / len(measure_mean))
+grpd_selected_df = selected_df.groupby(["reduced_sample_size"])
+measure_mean = grpd_selected_df[measure_name].mean()
+measure_std = grpd_selected_df[measure_name].std()
+n_tests = int(len(selected_df) / len(measure_mean))
+
+plot()
