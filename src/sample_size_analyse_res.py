@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/sample_size/results_3/sample_size_50-5000_10-500.csv"
+input_file_path = "../results/sample_size/results_3/sample_size_50-1000_10-500.csv"
 output_folder_path = "../results"
 output_file_prefix = "sample_size_plot"
 
