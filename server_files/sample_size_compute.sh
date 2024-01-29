@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
-#SBATCH --account 1 
-#SBATCH --mail-type ALL 
+#SBATCH --account 1
+#SBATCH --mail-type ALL
 #SBATCH --mail-user guillaume.guex@unil.ch
 
 #SBATCH --chdir ../src/
