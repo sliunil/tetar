@@ -102,4 +102,7 @@ results_file_path = \
     f"{results_folder_path}/{results_file_prefix}_{file_name[:-4]}_" \
     f"{min(reduced_sample_sizes)}-{max(reduced_sample_sizes)}_" \
     f"{min(subsample_lens)}-{max(subsample_lens)}.csv"
+
+if not os.path.exists(results_folder_path):   
+    os.makedirs(results_folder_path) 
 results_df.to_csv(results_file_path, index=False)
