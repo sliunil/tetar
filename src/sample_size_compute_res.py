@@ -48,15 +48,20 @@ def compute_ld_indice(parameters):
     (reduced_sample, reduced_sample_size, id_draw), \
         (subsample_len, mtld_threshold, num_subsamples) = parameters
     smple_entropy = sample_entropy(reduced_sample)
-    subsample_entropy_rdm, _ = subsample_entropy(reduced_sample, 
-                                                 subsample_len, 
-                                                 num_subsamples)
-    subsample_entropy_mav, _ = subsample_entropy(reduced_sample, 
-                                                 subsample_len, 
-                                                 num_subsamples,
-                                                 mode="window")
-    exp_variety = get_expected_subsample_variety(Counter(reduced_sample),
-                                                 subsample_len)
+    if subsample_len > len(reduced_sample):
+        subsample_entropy_rdm = np.nan
+        subsample_entropy_mav = np.nan
+        exp_variety = np.nan
+    else:
+        subsample_entropy_rdm, _ = subsample_entropy(reduced_sample, 
+                                                    subsample_len, 
+                                                    num_subsamples)
+        subsample_entropy_mav, _ = subsample_entropy(reduced_sample, 
+                                                    subsample_len, 
+                                                    num_subsamples,
+                                                    mode="window")
+        exp_variety = get_expected_subsample_variety(Counter(reduced_sample),
+                                                    subsample_len)
     mtld = MTLD(reduced_sample, mtld_threshold)
     return smple_entropy, subsample_entropy_rdm, subsample_entropy_mav, \
         exp_variety, mtld

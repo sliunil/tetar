@@ -19,5 +19,5 @@ for i, file in enumerate(files):
     else:
         new_file_df = pd.read_csv(f"{input_folder_path}/{file}")
         results_df = pd.concat([results_df, new_file_df])
-        
+               
 results_df.to_csv(output_file_path, index=None)
