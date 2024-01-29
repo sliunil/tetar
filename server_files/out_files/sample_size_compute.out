@@ -1,36 +1,4 @@
 ================================================================================
 Folder: literature
 File: JMBarrie_PeterPan.txt
-File: DanielDefoe_RobinsonCrusoe.txt
-File: FrancesBurnett_TheSecretGarden.txt
-File: LouisaAlcott_LittleWomen.txt
-File: StGeorgeRathborne_TheSpidersWeb.txt
-File: LucyMontgomery_AnneOfGreenGables.txt
-File: RobertStevenson_TreasureIsland.txt
-File: RudyardKipling_TheJungleBook.txt
-File: AnnaSewell_BlackBeauty.txt
-File: JamesJoyce_Ulysses.txt
-================================================================================
-Folder: poetry
-File: GeorgeByron_ChildeHaroldsPilgrimage.txt
-File: LesslieHall_Beowulf.txt
-File: EdmundSpenser_TheFaerieQueeneBook1.txt
-File: WalterScott_Marmion.txt
-File: RobertBurns_PoemsAndSongs.txt
-File: JohnMilton_ParadiseLost.txt
-File: OscarWilde_Poems.txt
-File: GeoffreyChaucer_TheCanterburyTales.txt
-File: AlfredTennyson_IdyllsOfTheKing.txt
-File: ElizabethBrowning_AuroraLeigh.txt
-================================================================================
-Folder: legal
-File: usc35.txt
-File: usc54.txt
-File: usc52.txt
-File: usc14.txt
-File: usc40.txt
-File: usc23.txt
-File: usc36.txt
-File: usc44.txt
-File: usc37.txt
-File: usc11.txt
+slurmstepd: error: *** JOB 37781760 ON dna055 CANCELLED AT 2024-01-29T15:15:24 ***

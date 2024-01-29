@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "sample_size_compute_res_server.py", line 105, in <module>
+    results_df.to_csv(results_file_path, index=False)
+  File "/users/gguex/tetar/.venv/lib64/python3.6/site-packages/pandas/core/generic.py", line 3170, in to_csv
+    formatter.save()
+  File "/users/gguex/tetar/.venv/lib64/python3.6/site-packages/pandas/io/formats/csvs.py", line 190, in save
+    compression=dict(self.compression_args, method=self.compression),
+  File "/users/gguex/tetar/.venv/lib64/python3.6/site-packages/pandas/io/common.py", line 493, in get_handle
+    f = open(path_or_buf, mode, encoding=encoding, errors=errors, newline="")
+FileNotFoundError: [Errno 2] No such file or directory: '../results/results_2/all_files/sample_size_FrancesBurnett_TheSecretGarden_2000-29000_50-2000.csv'
