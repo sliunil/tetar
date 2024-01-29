@@ -16,15 +16,15 @@ import sys
 # The corpora folder path
 corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
-results_folder_path = "../results/results_2/all_files"
+results_folder_path = "../results/results_3/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Parameters
-reduced_sample_sizes = np.logspace(np.log10(50), np.log10(29000), 
+reduced_sample_sizes = np.logspace(np.log10(50), np.log10(5000), 
                                    num=15).astype(int) + 1
 num_reduce_sample = 10
-subsample_lens = [50, 100, 500, 1000, 2000, 5000]
-mtld_thresholds = [0.85, 0.80, 0.75, 0.70, 0.65, 0.6]
+subsample_lens = [10, 50, 100, 200, 500]
+mtld_thresholds = [0.85, 0.80, 0.75, 0.70, 0.65]
 num_subsamples = 10
 
 
