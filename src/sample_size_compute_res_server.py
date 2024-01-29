@@ -20,7 +20,7 @@ results_folder_path = "../results/results_3/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Parameters
-reduced_sample_sizes = np.logspace(np.log10(50), np.log10(5000), 
+reduced_sample_sizes = np.logspace(np.log10(50), np.log10(1000), 
                                    num=15).astype(int) + 1
 num_reduce_sample = 10
 subsample_lens = [10, 50, 100, 200, 500]
