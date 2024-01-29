@@ -6,13 +6,13 @@
 
 #SBATCH --chdir ../src/
 #SBATCH --job-name sample_size_compute
-#SBATCH --output ../server_files/sample_size_compute.out
+#SBATCH --output ../server_files/out_files/sample_size_compute.out
 
 #SBATCH --partition cpu
-
 #SBATCH --nodes 1 
 #SBATCH --ntasks 1 
-#SBATCH --cpus-per-task 1
+
+#SBATCH --cpus-per-task 12
 #SBATCH --mem 32G 
 #SBATCH --time 48:00:00 
 #SBATCH --export NONE
