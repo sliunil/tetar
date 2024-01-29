@@ -6,7 +6,7 @@ import pandas as pd
 # -------------------------------
 
 input_folder_path = "results_2/all_files"
-output_file_path = "results_2/sample_size_2000-29000_50-2000.csv"
+output_file_path = "results_2/sample_size_50-29000_50-5000.csv"
 
 # -------------------------------
 # --- CODE
