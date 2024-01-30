@@ -29,6 +29,8 @@ subfolder_names = os.listdir(corpora_folder_path)
 # Define colors
 color_map = cm.get_cmap("hsv", len(subfolder_names) + 1)
 
+    
+fig, axs = plt.subplots(len(subfolder_names))
 
 for grp_id, subfolder_name in enumerate(subfolder_names):
     
@@ -48,28 +50,16 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
         # Compute results
         sample = tokenize(content.lower())
         counter = Counter(sample)
-        log_rank, log_freq, _, _ = counter_to_zipf_data(counter, [0])
-        
-        # Store for group slopes  
-        # grp_log_ranks.extend(log_rank)
-        # grp_log_freq.extend(log_freq)
-        lm_model = LinearRegression()
-        lm_model.fit(log_rank.reshape(-1, 1), log_freq)
-        intercepts.append(lm_model.intercept_)
-        slopes.append(lm_model.coef_[0])
+        ranks, frequencies, lm_model, z_shift = counter_to_zipf_data(counter)
         
         # Plot the file
-        plt.plot(log_rank, log_freq, alpha=0.5, linewidth=0.5, 
-                 color=color_map(grp_id))
-        
-    # Linear regression model for the group
-    # lm_model = LinearRegression()
-    # lm_model.fit(np.array(grp_log_ranks).reshape(-1, 1), grp_log_freq)
-    # plt.axline(xy1=(0, lm_model.intercept_), slope=lm_model.coef_[0], 
-    #            color=color_map(grp_id), label=subfolder_name)
-    plt.axline(xy1=(0, np.mean(intercepts)), slope=np.mean(slopes), 
-               color=color_map(grp_id), label=subfolder_name)
-    plt.legend()
+        axs[grp_id].scatter(np.log(ranks), np.log(frequencies), alpha=0.5, 
+                            color=color_map(grp_id), marker=".", s=0.01)
+        axs[grp_id].plot(np.log(ranks), 
+                         lm_model.predict(
+                             np.log(ranks + z_shift).reshape(-1, 1)),
+                         alpha=0.8, linewidth=0.8, color="gray")
+        print(f"{z_shift} ")
     
 # Save figure
 plt.savefig(f"{results_folder_path}/real_corpora_zipf_plot_mean.png", dpi=1200)

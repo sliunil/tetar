@@ -130,9 +130,9 @@ def MTLD(sample, ttr_threshold=.72):
     """Wrapper for the MTLD method in taaled."""
     return LD_OBJECT.MTLD(sample, ttrval=ttr_threshold)
 
-def counter_to_zipf_data(counter, shifts=np.linspace(0, 100, 201)):
-    """Compute zipf data from a counter: give log of ranks,
-    linear model fitted on (shifted) log-rank vs log-freq and shift of ranks"""
+def counter_to_zipf_data(counter, shifts=np.linspace(0, 200, 401)):
+    """Compute zipf data from a counter: give ranks, frequencies
+    linear model fitted on (shifted) log-rank vs log-freq, and shift of ranks"""
     
     # Get the frequencies
     frequencies = list(counter.values())
@@ -140,19 +140,22 @@ def counter_to_zipf_data(counter, shifts=np.linspace(0, 100, 201)):
 
     # Compute log_rank and log_freq 
     ranks = np.array(range(1, len(frequencies) + 1))
-    log_rank = np.log(ranks)
-    log_freq = np.log(frequencies)
+    log_freqs = np.log(frequencies)
         
     # Linear regression model 
     lm_model = LinearRegression()
-    scores = []
+    mses = []
     for shift in shifts:
         shifted_log_rank = np.log(ranks + shift)
-        lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freq)
-        scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), log_freq))
-    estimated_shift = shifts[np.where(scores == np.max(scores))[0][0]]
-    lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), log_freq)
+        lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freqs)
+        #scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), 
+        #                             np.log(frequencies)))
+        freq_estimates = lm_model.predict(shifted_log_rank.reshape(-1, 1))
+        mses.append(np.mean((freq_estimates - log_freqs)**2))
+    estimated_shift = shifts[np.where(mses == np.min(mses))[0][0]]
+    lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), 
+                 np.log(frequencies))
     
-    return log_rank, log_freq, lm_model, estimated_shift
+    return ranks, frequencies, lm_model, estimated_shift
     
     
