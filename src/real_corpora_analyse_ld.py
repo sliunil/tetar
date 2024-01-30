@@ -29,7 +29,7 @@ num_data = ld_stat_df.drop(["name", "group"], axis=1)
 correlations_df = pd.DataFrame(np.corrcoef(num_data.to_numpy().T), 
                                columns=num_data.columns, 
                                index=num_data.columns)
-correlations_df.style.background_gradient(cmap="Reds").to_excel(
+correlations_df.style.background_gradient(cmap="coolwarm").to_excel(
     output_cor_path)
 
 # ---- Groups means
@@ -40,3 +40,9 @@ ld_mean_df = ld_stat_df_gpd.mean()
 
 # Save it
 ld_mean_df.to_csv(output_mean_path)
+
+# import matplotlib.pyplot as plt
+
+# plt.scatter(num_data["zipf_intercept"], num_data["zipf_slope"], )
+# plt.scatter(num_data["zipf_intercept"], num_data["zipf_shift"], )
+# plt.scatter(num_data["zipf_slope"], num_data["zipf_shift"], )
