@@ -66,7 +66,12 @@ plt.savefig(f"{output_folder_path}/intercept_shift")
 
 # pente entre -1 et -2
 
-# p = -1.5
-# intercept = (p - model_isl.intercept_) / model_isl.coef_[0]
-# shift = np.exp(model_slsh.predict(np.array(np.log(-p)).reshape(-1, 1)))[0]
-# shift_2 = np.exp(model_ish.predict(np.array(np.log(intercept)).reshape(-1, 1)))[0]
+for p in np.linspace(-1.0, -2.0, 20):
+    intercept = model_sl_in.predict(
+        np.array(p).reshape(-1, 1))[0]
+    shift = np.exp(model_sl_sh.predict(
+        np.array(np.log(-p)).reshape(-1, 1)))[0]
+    shift_2 = np.exp(model_in_sh.predict(
+        np.array(np.log(intercept)).reshape(-1, 1)))[0]
+
+    print(f"slope={p}, intercept={intercept}, shift={shift}, shift_2={shift_2}")
