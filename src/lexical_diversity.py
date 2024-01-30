@@ -130,22 +130,29 @@ def MTLD(sample, ttr_threshold=.72):
     """Wrapper for the MTLD method in taaled."""
     return LD_OBJECT.MTLD(sample, ttrval=ttr_threshold)
 
-def counter_to_zipf_data(counter):
-    """Compute zipf data from a counter: give log of ranks, 
-    log of frequencies, estimated intercept and slope"""
+def counter_to_zipf_data(counter, shifts=np.linspace(0, 100, 201)):
+    """Compute zipf data from a counter: give log of ranks,
+    linear model fitted on (shifted) log-rank vs log-freq and shift of ranks"""
     
     # Get the frequencies
     frequencies = list(counter.values())
     frequencies.sort(reverse=True)
 
     # Compute log_rank and log_freq 
-    log_rank = np.log(list(range(1, len(frequencies) + 1)))
+    ranks = np.array(range(1, len(frequencies) + 1))
+    log_rank = np.log(ranks)
     log_freq = np.log(frequencies)
         
     # Linear regression model 
     lm_model = LinearRegression()
-    lm_model.fit(log_rank.reshape(-1, 1), log_freq)
+    scores = []
+    for shift in shifts:
+        shifted_log_rank = np.log(ranks + shift)
+        lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freq)
+        scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), log_freq))
+    estimated_shift = shifts[np.where(scores == np.min(scores))[0][0]]
+    lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), log_freq)
     
-    return log_rank, log_freq, lm_model.intercept_, lm_model.coef_[0]
+    return log_rank, log_freq, lm_model, estimated_shift
     
     

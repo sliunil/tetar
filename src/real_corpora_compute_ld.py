@@ -65,7 +65,7 @@ for subfolder_name in subfolder_names:
         m_entrpy_mav, sd_entrpy_mav = \
             subsample_entropy(sample, subsample_len, num_subsamples, 
                               mode="window")
-        _, _, z_intercept, z_slope = counter_to_zipf_data(counter)
+        _, _, lm_model, z_shift = counter_to_zipf_data(counter)
         
         # Store results 
         doc_result_df = \
@@ -82,8 +82,8 @@ for subfolder_name in subfolder_names:
                 "exp_variety": [get_expected_subsample_variety(counter, 
                                                                subsample_len)],
                 "MTLD": [MTLD(sample)], 
-                "zipf_intercept": [z_intercept], 
-                "zipf_slope": [z_slope]})
+                "zipf_intercept": [lm_model.intercept_], 
+                "zipf_slope": [lm_model.coef_[0]]})
         results_df = pd.concat([results_df, doc_result_df], ignore_index=True)
         
 # Save dataset 
