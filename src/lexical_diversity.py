@@ -150,7 +150,7 @@ def counter_to_zipf_data(counter, shifts=np.linspace(0, 100, 201)):
         shifted_log_rank = np.log(ranks + shift)
         lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freq)
         scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), log_freq))
-    estimated_shift = shifts[np.where(scores == np.min(scores))[0][0]]
+    estimated_shift = shifts[np.where(scores == np.max(scores))[0][0]]
     lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), log_freq)
     
     return log_rank, log_freq, lm_model, estimated_shift

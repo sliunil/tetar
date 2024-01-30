@@ -48,7 +48,7 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
         # Compute results
         sample = tokenize(content.lower())
         counter = Counter(sample)
-        log_rank, log_freq, _, _ = counter_to_zipf_data(counter)
+        log_rank, log_freq, _, _ = counter_to_zipf_data(counter, [0])
         
         # Store for group slopes  
         # grp_log_ranks.extend(log_rank)

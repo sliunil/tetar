@@ -36,7 +36,8 @@ results_df = pd.DataFrame(columns=["name",
                                    "exp_variety",
                                    "MTLD", 
                                    "zipf_intercept", 
-                                   "zipf_slope"])
+                                   "zipf_slope", 
+                                   "zipf_shift"])
 
 # List the subfolders
 subfolder_names = os.listdir(corpora_folder_path)
@@ -83,9 +84,10 @@ for subfolder_name in subfolder_names:
                                                                subsample_len)],
                 "MTLD": [MTLD(sample)], 
                 "zipf_intercept": [lm_model.intercept_], 
-                "zipf_slope": [lm_model.coef_[0]]})
+                "zipf_slope": [lm_model.coef_[0]],
+                "zipf_shift": [z_shift]})
         results_df = pd.concat([results_df, doc_result_df], ignore_index=True)
         
 # Save dataset 
-results_df.to_csv(f"{results_folder_path}/real_corpora_indices_{
-    subsample_len}_{num_subsamples}.csv")
+results_df.to_csv(f"{results_folder_path}/real_corpora_indices_"
+                  f"{subsample_len}_{num_subsamples}.csv")
