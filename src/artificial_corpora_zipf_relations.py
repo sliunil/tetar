@@ -1,7 +1,4 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
 from lexical_diversity import TextGenerator
 
 
@@ -10,7 +7,7 @@ from lexical_diversity import TextGenerator
 # -------------------------------
 
 input_file_path = "../results/real_corpora/real_corpora_indices_5000_10.csv"
-output_folder_path = "../results/real_corpora"
+output_folder_path = "../results/artificial_corpora"
 
 
 # -------------------------------
@@ -23,13 +20,10 @@ ld_stat_df = pd.read_csv(input_file_path, index_col=0)
 # Get groups
 groups = ld_stat_df["group"]
 
-# Keep numerical data
-num_data = ld_stat_df.drop(["name", "group"], axis=1)
-
 # Extract quantities of interest
-slopes = num_data["zipf_slope"].to_numpy()
-intercepts = num_data["zipf_intercept"].to_numpy()
-shifts = num_data["zipf_shift"].to_numpy()
+slopes = ld_stat_df["zipf_slope"].to_numpy()
+intercepts = ld_stat_df["zipf_intercept"].to_numpy()
+shifts = ld_stat_df["zipf_shift"].to_numpy()
 
 # Fit the generator
 my_generator = TextGenerator()
