@@ -53,9 +53,26 @@ max_slope_counter = Counter(max_slope_sample)
 max_slope_ranks, max_slope_frequencies, max_slope_lm_model, max_slope_shift = \
     counter_to_zipf_data(max_slope_counter)
     
-
-
-
 # Fit the generator
 my_generator = TextGenerator()
 my_generator.fit(slopes, intercepts, shifts)
+    
+# Slope space to explore
+tested_slopes = np.linspace(-1.7, 
+                            -0.95, 20)
+# The rank of the models
+tested_ranks = np.arange(1, 6290)
+
+#plt.scatter(np.log(min_slope_ranks), np.log(min_slope_frequencies))
+#plt.scatter(np.log(max_slope_ranks), np.log(max_slope_frequencies))
+pred_min_log_freq = np.log(tested_ranks + min_slope_shift)*min_slope_lm_model.coef_[0] + min_slope_lm_model.intercept_
+pred_max_log_freq = np.log(tested_ranks + max_slope_shift)*max_slope_lm_model.coef_[0] + max_slope_lm_model.intercept_
+plt.plot(np.log(tested_ranks), pred_min_log_freq, color="red")
+plt.plot(np.log(tested_ranks), pred_max_log_freq, color="red")
+for tested_slope in tested_slopes:
+    slope, intercept, shift = my_generator.get_parameters(tested_slope)
+    print(f"{slope}, {intercept}, {shift}")
+    predicted_log_freq = np.log(tested_ranks + shift)*slope + intercept
+    plt.plot(np.log(tested_ranks), predicted_log_freq, color="blue")
+
+
