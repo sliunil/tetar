@@ -5,6 +5,8 @@ import random
 import re
 import numpy as np
 from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+from matplotlib import cm
 
 __version__ = 0.2
 __authors__ = ["aris.xanthos@unil.ch", "guillaume.guex@unil.ch"]
@@ -157,5 +159,88 @@ def counter_to_zipf_data(counter, shifts=np.linspace(0, 200, 401)):
                  np.log(frequencies))
     
     return ranks, frequencies, lm_model, estimated_shift
+
+class TextGenerator:
+    """A class to create artificial texts, following a zipf-mandelbrot 
+    distribution parametrized by the slope only. The intercept and the shift 
+    are deduced from data"""
     
+    # Constructor
+    def __init__(self):
+        self.slopes = np.empty((0))
+        self.intercepts = np.empty((0))
+        self.shifts = np.empty((0))
+        self.model_sl_in = LinearRegression()
+        self.model_sl_sh = LinearRegression()
+        self.model_in_sh = LinearRegression()
+        
+    # Fit the models
+    def fit(self, slopes, intercepts, shifts):
+        self.slopes = slopes
+        self.intercepts = intercepts
+        self.shifts = shifts
+        self.model_sl_in.fit(slopes.reshape(-1, 1), intercepts)
+        self.model_sl_sh.fit(np.log(-slopes).reshape(-1, 1), np.log(shifts))
+        self.model_in_sh.fit(np.log(intercepts).reshape(-1, 1), np.log(shifts))
+
+    # Plot the relationships
+    def plot(self, groups=None):
+        
+        # Group colors 
+        if groups is not None:
+            gr_fact = np.unique(groups, return_inverse=True)
+            cmap = cm.get_cmap("hsv", len(gr_fact[0]) + 1)
+            gr_color = {fact:cmap(i) for i, fact in enumerate(gr_fact[0])}
+            
+        # Intercepts from slopes
+        sorted_sl = np.sort(self.slopes)
+        in_from_sl = self.model_sl_in.predict(sorted_sl.reshape(-1, 1))
+        in_sl_fig, in_sl_ax = plt.subplots()
+        if groups is not None:
+            in_sl_ax.scatter(self.slopes, self.intercepts, 
+                             c=groups.map(gr_color))
+        else:
+            in_sl_ax.scatter(self.slopes, self.intercepts)
+        in_sl_ax.plot(sorted_sl, in_from_sl, color="black")
+        in_sl_ax.set_xlabel("Slope")
+        in_sl_ax.set_ylabel("Intercept")
+        
+        # Shifts from slopes
+        sh_from_sl = np.exp(
+            self.model_sl_sh.predict(np.log(-sorted_sl).reshape(-1, 1)))
+        sh_sl_fig, sh_sl_ax = plt.subplots()
+        if groups is not None:
+            sh_sl_ax.scatter(self.slopes, self.shifts, 
+                             c=groups.map(gr_color))
+        else:
+            sh_sl_ax.scatter(self.slopes, self.shifts)
+        sh_sl_ax.plot(sorted_sl, sh_from_sl, color="black")
+        sh_sl_ax.set_xlabel("Slope")
+        sh_sl_ax.set_ylabel("Shift")
+
+        # Shifts from intercepts
+        sorted_in = np.sort(self.intercepts)
+        sh_from_in = np.exp(
+            self.model_in_sh.predict(np.log(sorted_in).reshape(-1, 1)))
+        sh_in_fig, sh_in_ax = plt.subplots()
+        if groups is not None:
+            sh_in_ax.scatter(self.intercepts, self.shifts, 
+                             c=groups.map(gr_color))
+        else:
+            sh_in_ax.scatter(self.intercepts, self.shifts)
+        sh_in_ax.plot(sorted_in, sh_from_in, color="black")
+        sh_in_ax.set_xlabel("Intercept")
+        sh_in_ax.set_ylabel("Shift")
+        
+        return in_sl_fig, in_sl_ax, sh_sl_fig, sh_sl_ax, sh_in_fig, sh_sl_ax
+    
+    # Get zipf-mandelbrot parameters
+    def get_parameters(self, slope):
+        intercept = self.model_sl_in.predict(
+            np.array(slope).reshape(-1, 1))[0]
+        shift = np.exp(self.model_sl_sh.predict(
+            np.array(np.log(-slope)).reshape(-1, 1)))[0]
+        return slope, intercept, shift
+        
+            
     
