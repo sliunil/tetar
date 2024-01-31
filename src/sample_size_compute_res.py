@@ -22,7 +22,7 @@ results_file_prefix = "sample_size"
 reduced_sample_sizes = np.linspace(2000, 29000, 10).astype(int)
 num_reduce_sample = 10
 subsample_lens = [50, 100, 500, 1000, 2000]
-mtld_thresholds = [0.85, 0.80, 0.75, 0.70, 0.65]
+mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
 num_subsamples = 10
 
 # -------------------------------
