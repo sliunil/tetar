@@ -5,8 +5,8 @@ import pandas as pd
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_folder_path = "results_4/all_files"
-output_file_path = "results_4/sample_size_2001-29000_50-2000.csv"
+input_folder_path = "results_large/all_files"
+output_file_path = "results_large/sample_size_2001-29000_50-5000.csv"
 
 # -------------------------------
 # --- CODE
