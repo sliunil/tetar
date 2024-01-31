@@ -15,7 +15,7 @@ import numpy as np
 # The corpora folder path
 corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
-results_folder_path = "../results"
+results_file_path = "../results/real_corpora_zipf_plot.png"
 
 
 
@@ -33,10 +33,6 @@ color_map = cm.get_cmap("hsv", len(subfolder_names) + 1)
 fig, axs = plt.subplots(len(subfolder_names))
 
 for grp_id, subfolder_name in enumerate(subfolder_names):
-    
-    # To store group caracteristics
-    #grp_log_ranks, grp_log_freq = [], []
-    intercepts, slopes = [], []
 
     # Get files
     file_names = os.listdir(f"{corpora_folder_path}/{subfolder_name}")
@@ -59,7 +55,6 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
                          lm_model.predict(
                              np.log(ranks + z_shift).reshape(-1, 1)),
                          alpha=0.8, linewidth=0.8, color="gray")
-        print(f"{z_shift} ")
     
 # Save figure
-plt.savefig(f"{results_folder_path}/real_corpora_zipf_plot_mean.png", dpi=1200)
+plt.savefig(results_file_path, dpi=1200)

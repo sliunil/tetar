@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from collections import Counter
 from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 
@@ -18,8 +19,28 @@ output_folder_path = "../results/artificial_corpora"
 # --- CODE
 # -------------------------------
 
-# Load dataset
+# Load dataset and sort it
 ld_stat_df = pd.read_csv(input_file_path, index_col=0)
+ld_stat_df = ld_stat_df.sort_values("zipf_slope")
+
+# Get sorted name and group
+sorted_names = ld_stat_df["name"].values
+sorted_groups = ld_stat_df["group"].values
+
+# Create cmap
+color_map = cm.get_cmap("cool", len(sorted_names))
+
+# Loop on all files
+for i, name in enumerate(sorted_names):
+    with open(f"{corpora_folder_path}/{sorted_groups[i]}/{name}") as file:
+        content = file.read()
+    
+    sample = tokenize(content.lower())
+    counter = Counter(sample)
+    ranks, frequencies, lm_model, shift = counter_to_zipf_data(counter)
+    plt.scatter(np.log(ranks), np.log(frequencies), color=color_map(i), 
+                alpha=0.5, s=0.2)
+
 
 # Extract quantities of interest
 slopes = ld_stat_df["zipf_slope"].to_numpy()

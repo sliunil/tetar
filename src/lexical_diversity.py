@@ -147,15 +147,15 @@ def counter_to_zipf_data(counter, shifts=np.linspace(0, 200, 401)):
         
     # Linear regression model 
     lm_model = LinearRegression()
-    mses = []
+    scores = []
     for shift in shifts:
         shifted_log_rank = np.log(ranks + shift)
         lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freqs)
-        #scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), 
-        #                             np.log(frequencies)))
-        freq_estimates = lm_model.predict(shifted_log_rank.reshape(-1, 1))
-        mses.append(np.mean((freq_estimates - log_freqs)**2))
-    estimated_shift = shifts[np.where(mses == np.min(mses))[0][0]]
+        scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), 
+                                     np.log(frequencies)))
+        # freq_estimates = lm_model.predict(shifted_log_rank.reshape(-1, 1))
+        # mses.append(np.mean((freq_estimates - log_freqs)**2))
+    estimated_shift = shifts[np.where(scores == np.max(scores))[0][0]]
     lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), 
                  np.log(frequencies))
     
