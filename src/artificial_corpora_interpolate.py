@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib.colors import Normalize
 from collections import Counter
 from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 
@@ -13,6 +14,8 @@ from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 input_file_path = "../results/real_corpora/real_corpora_indices_5000_10.csv"
 corpora_folder_path = "../data/real_corpora/cleaned"
 output_folder_path = "../results/artificial_corpora"
+# generated size
+gen_size = 10000
 
 
 # -------------------------------
@@ -31,6 +34,9 @@ sorted_groups = ld_stat_df["group"].values
 color_map = cm.get_cmap("cool", len(sorted_names))
 
 # Loop on all files
+real_fig, real_ax = plt.subplots()
+esti_fig, esti_ax = plt.subplots()
+tested_ranks = np.arange(1, gen_size+1)
 for i, name in enumerate(sorted_names):
     with open(f"{corpora_folder_path}/{sorted_groups[i]}/{name}") as file:
         content = file.read()
@@ -38,62 +44,46 @@ for i, name in enumerate(sorted_names):
     sample = tokenize(content.lower())
     counter = Counter(sample)
     ranks, frequencies, lm_model, shift = counter_to_zipf_data(counter)
-    plt.scatter(np.log(ranks), np.log(frequencies), color=color_map(i), 
-                alpha=0.5, s=0.2)
-
-
+    real_ax.plot(np.log(ranks), np.log(frequencies), color=color_map(i), 
+                 alpha=0.5)
+    predicted_log_freq = np.log(tested_ranks + shift)*lm_model.coef_[0] \
+        + lm_model.intercept_
+    esti_ax.plot(np.log(tested_ranks), predicted_log_freq, color=color_map(i),
+                 alpha=0.5)
+    
 # Extract quantities of interest
 slopes = ld_stat_df["zipf_slope"].to_numpy()
 intercepts = ld_stat_df["zipf_intercept"].to_numpy()
 shifts = ld_stat_df["zipf_shift"].to_numpy()
-
-# Get document with min_slope 
-min_slope_doc = ld_stat_df[
-    ld_stat_df.zipf_slope==
-    ld_stat_df["zipf_slope"].min()][['group', 'name']].values[0]
-# Get document with max_slope
-max_slope_doc = ld_stat_df[
-    ld_stat_df.zipf_slope==
-    ld_stat_df["zipf_slope"].max()][['group', 'name']].values[0]
-
-# Open the files
-with open(f"{corpora_folder_path}/{min_slope_doc[0]}/{min_slope_doc[1]}") \
-    as file:
-        min_slope_content = file.read()
-with open(f"{corpora_folder_path}/{max_slope_doc[0]}/{max_slope_doc[1]}") \
-    as file:
-        max_slope_content = file.read()
-        
-# Compute zipf from them 
-min_slope_sample = tokenize(min_slope_content.lower())
-min_slope_counter = Counter(min_slope_sample)
-min_slope_ranks, min_slope_frequencies, min_slope_lm_model, min_slope_shift = \
-    counter_to_zipf_data(min_slope_counter)
-max_slope_sample = tokenize(max_slope_content.lower())
-max_slope_counter = Counter(max_slope_sample)
-max_slope_ranks, max_slope_frequencies, max_slope_lm_model, max_slope_shift = \
-    counter_to_zipf_data(max_slope_counter)
     
 # Fit the generator
 my_generator = TextGenerator()
 my_generator.fit(slopes, intercepts, shifts)
     
 # Slope space to explore
-tested_slopes = np.linspace(-1.7, 
-                            -0.95, 20)
-# The rank of the models
-tested_ranks = np.arange(1, 6290)
-
-#plt.scatter(np.log(min_slope_ranks), np.log(min_slope_frequencies))
-#plt.scatter(np.log(max_slope_ranks), np.log(max_slope_frequencies))
-pred_min_log_freq = np.log(tested_ranks + min_slope_shift)*min_slope_lm_model.coef_[0] + min_slope_lm_model.intercept_
-pred_max_log_freq = np.log(tested_ranks + max_slope_shift)*max_slope_lm_model.coef_[0] + max_slope_lm_model.intercept_
-plt.plot(np.log(tested_ranks), pred_min_log_freq, color="red")
-plt.plot(np.log(tested_ranks), pred_max_log_freq, color="red")
-for tested_slope in tested_slopes:
+tested_slopes = np.linspace(np.min(slopes), np.max(slopes), len(sorted_names))
+arti_fig, arti_ax = plt.subplots()
+for i, tested_slope in enumerate(tested_slopes):
     slope, intercept, shift = my_generator.get_parameters(tested_slope)
-    print(f"{slope}, {intercept}, {shift}")
     predicted_log_freq = np.log(tested_ranks + shift)*slope + intercept
-    plt.plot(np.log(tested_ranks), predicted_log_freq, color="blue")
+    arti_ax.plot(np.log(tested_ranks), predicted_log_freq, color=color_map(i), 
+                 alpha=0.5)
+    
+# Update and save plots 
+plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes), np.max(slopes)), 
+                               cmap=color_map), ax=real_ax, label="Slope")
+plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes), np.max(slopes)), 
+                               cmap=color_map), ax=esti_ax, label="Slope")
+plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes), np.max(slopes)), 
+                               cmap=color_map), ax=arti_ax, label="Slope")
+real_ax.set_xlabel("log(rank)")
+real_ax.set_ylabel("log(frequency)")
+esti_ax.set_xlabel("log(rank)")
+esti_ax.set_ylabel("log(frequency)")
+arti_ax.set_xlabel("log(rank)")
+arti_ax.set_ylabel("log(frequency)")
+real_fig.savefig(f"{output_folder_path}/real_distrib.png", dpi=1200)
+esti_fig.savefig(f"{output_folder_path}/interpolated_distrib.png", dpi=1200)
+arti_fig.savefig(f"{output_folder_path}/artificial_distrib.png", dpi=1200)
 
 

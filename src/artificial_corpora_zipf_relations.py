@@ -31,6 +31,6 @@ my_generator.fit(slopes, intercepts, shifts)
 
 # Plot the relationships
 in_sl_fig, _, sh_sl_fig, _, sh_in_fig, _ = my_generator.plot(groups)
-in_sl_fig.savefig(f"{output_folder_path}/slope_intercept")
-sh_sl_fig.savefig(f"{output_folder_path}/slope_shift")
-sh_in_fig.savefig(f"{output_folder_path}/intercept_shift")
+in_sl_fig.savefig(f"{output_folder_path}/slope_intercept.png", dpi=1200)
+sh_sl_fig.savefig(f"{output_folder_path}/slope_shift.png", dpi=1200)
+sh_in_fig.savefig(f"{output_folder_path}/intercept_shift.png", dpi=1200)
