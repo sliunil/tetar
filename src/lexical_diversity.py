@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib.lines import Line2D
 
 __version__ = 0.2
 __authors__ = ["aris.xanthos@unil.ch", "guillaume.guex@unil.ch"]
@@ -191,6 +192,11 @@ class TextGenerator:
             gr_fact = np.unique(groups, return_inverse=True)
             cmap = cm.get_cmap("hsv", len(gr_fact[0]) + 1)
             gr_color = {fact:cmap(i) for i, fact in enumerate(gr_fact[0])}
+            legend_elements = [Line2D([0], [0], marker='o', color=cmap(i), 
+                                      label=gr_fact[0][i], 
+                                      markerfacecolor=cmap(i), markersize=5,
+                                      linewidth=0) 
+                               for i, _ in enumerate(gr_fact[0])]
             
         # Intercepts from slopes
         sorted_sl = np.sort(self.slopes)
@@ -199,6 +205,7 @@ class TextGenerator:
         if groups is not None:
             in_sl_ax.scatter(self.slopes, self.intercepts, 
                              c=groups.map(gr_color))
+            in_sl_ax.legend(handles=legend_elements)
         else:
             in_sl_ax.scatter(self.slopes, self.intercepts)
         in_sl_ax.plot(sorted_sl, in_from_sl, color="black")
@@ -212,6 +219,7 @@ class TextGenerator:
         if groups is not None:
             sh_sl_ax.scatter(self.slopes, self.shifts, 
                              c=groups.map(gr_color))
+            sh_sl_ax.legend(handles=legend_elements)
         else:
             sh_sl_ax.scatter(self.slopes, self.shifts)
         sh_sl_ax.plot(sorted_sl, sh_from_sl, color="black")
@@ -226,6 +234,7 @@ class TextGenerator:
         if groups is not None:
             sh_in_ax.scatter(self.intercepts, self.shifts, 
                              c=groups.map(gr_color))
+            sh_in_ax.legend(handles=legend_elements)
         else:
             sh_in_ax.scatter(self.intercepts, self.shifts)
         sh_in_ax.plot(sorted_in, sh_from_in, color="black")
