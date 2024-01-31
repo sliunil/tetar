@@ -11,6 +11,7 @@ from matplotlib import cm
 input_file_path = "../results/sample_size/results_large/sample_size_2001-29000_50-5000.csv"
 output_folder_path = "../results"
 output_file_prefix = "sample_size_plot"
+min_prop_to_compute_mtld = 0.6
 
 
 # -------------------------------
@@ -62,7 +63,10 @@ for measure_name_id, measure_name in enumerate(measure_names):
             grpd_selected_df = selected_df.groupby(["reduced_sample_size"])
             measure_mean = grpd_selected_df[measure_name].mean()
             measure_std = grpd_selected_df[measure_name].std()
-            n_tests = int(len(selected_df) / len(measure_mean))
+            n_theo_tests = int(len(selected_df) / len(measure_mean))
+            n_tests = grpd_selected_df[measure_name].count()
+            measure_mean.loc[n_tests / n_theo_tests 
+                             < min_prop_to_compute_mtld] = np.nan
 
             # Plot it 
             if genre_id == 0 and not (measure_name == 'sample_entropy'):
@@ -76,7 +80,7 @@ for measure_name_id, measure_name in enumerate(measure_names):
                         linestyle=linestyles[subsample_len_id],
                         label=genre)
             plt.errorbar(measure_mean.index, measure_mean.values, 
-                        yerr=measure_std.values*1.96/np.sqrt(n_tests), 
+                        yerr=measure_std.values*1.96/np.sqrt(n_theo_tests), 
                         color=color_map(genre_id),
                         linestyle=linestyles[subsample_len_id])
     plt.xlabel("Sample size")
