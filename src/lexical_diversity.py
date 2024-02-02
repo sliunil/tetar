@@ -252,6 +252,17 @@ class TextGenerator:
         shift = np.exp(self.model_sl_sh.predict(
             np.array(np.log(-slope)).reshape(-1, 1)))[0]
         return slope, intercept, shift
+    
+    # Generate samples with defined slope
+    def generate_samples(self, slope, sample_size, num_samples=1):
+        _, intercept, shift = self.get_parameters(slope)
+        types = np.arange(1, sample_size+1)
+        estimated_freq = np.exp(np.log(types + shift)*slope + intercept)
+        probabilities = estimated_freq / np.sum(estimated_freq)
+        samples = np.array([np.where(
+            np.random.multinomial(1, probabilities, sample_size) > 0)[1] + 1 
+                            for _ in range(num_samples)])
+        return samples
         
             
     
