@@ -58,3 +58,4 @@ for grp_id, subfolder_name in enumerate(subfolder_names):
     
 # Save figure
 plt.savefig(results_file_path, dpi=1200)
+

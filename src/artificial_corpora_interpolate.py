@@ -11,7 +11,7 @@ from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora/real_corpora_indices_5000_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
 corpora_folder_path = "../data/real_corpora/cleaned"
 output_folder_path = "../results/artificial_corpora"
 # generated size
@@ -82,8 +82,10 @@ esti_ax.set_xlabel("log(rank)")
 esti_ax.set_ylabel("log(frequency)")
 arti_ax.set_xlabel("log(rank)")
 arti_ax.set_ylabel("log(frequency)")
+esti_ax.set_xlim(real_ax.get_xlim())
+esti_ax.set_ylim(real_ax.get_ylim())
+arti_ax.set_xlim(real_ax.get_xlim())
+arti_ax.set_ylim(real_ax.get_ylim())
 real_fig.savefig(f"{output_folder_path}/real_distrib.png", dpi=1200)
 esti_fig.savefig(f"{output_folder_path}/interpolated_distrib.png", dpi=1200)
 arti_fig.savefig(f"{output_folder_path}/artificial_distrib.png", dpi=1200)
-
-

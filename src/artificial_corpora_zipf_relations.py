@@ -6,7 +6,7 @@ from lexical_diversity import TextGenerator
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora/real_corpora_indices_5000_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
 output_folder_path = "../results/artificial_corpora"
 
 
