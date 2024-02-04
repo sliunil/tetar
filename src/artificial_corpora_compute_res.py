@@ -13,7 +13,7 @@ from itertools import product
 
 input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
 corpora_folder_path = "../data/real_corpora/cleaned"
-output_folder_path = "../results/artificial_corpora"
+results_file_path = "../results/artificial_corpora/results_test.csv"
 # Tested slopes
 tested_slopes = np.linspace(-1, -2, 20)
 # Generated size
@@ -23,6 +23,8 @@ num_samples = 10
 # The length of subsamples / mtld thresholds
 subsample_lens = [50, 100, 500, 1000, 2000]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
+# Number of subsamples
+num_subsamples = 10
 
 # -------------------------------
 # --- CODE
@@ -30,18 +32,6 @@ mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
 
 # The number of cpu available
 n_cpu = mp.cpu_count()
-
-# Load dataset
-ld_stat_df = pd.read_csv(input_file_path, index_col=0)
-    
-# Extract quantities of interest
-slopes = ld_stat_df["zipf_slope"].to_numpy()
-intercepts = ld_stat_df["zipf_intercept"].to_numpy()
-shifts = ld_stat_df["zipf_shift"].to_numpy()
-    
-# Fit the generator
-my_generator = TextGenerator()
-my_generator.fit(slopes, intercepts, shifts)
 
 # Function for multiprocess computing
 def compute_ld_indice(parameters):
@@ -70,23 +60,45 @@ def compute_ld_indice(parameters):
     return smple_entropy, subsample_entropy_rdm, subsample_entropy_mav, \
         exp_variety, mtld
 
-# For slopes 
-tested_slope = tested_slopes[0]
+# Load dataset
+ld_stat_df = pd.read_csv(input_file_path, index_col=0)
+    
+# Extract quantities of interest
+slopes = ld_stat_df["zipf_slope"].to_numpy()
+intercepts = ld_stat_df["zipf_intercept"].to_numpy()
+shifts = ld_stat_df["zipf_shift"].to_numpy()
+    
+# Fit the generator
+my_generator = TextGenerator()
+my_generator.fit(slopes, intercepts, shifts)
+
 # Generate the samples
-samples = my_generator.generate_samples(tested_slope, gen_size, 
-                                        num_samples)
-
-
-
-# For subsample_len
-subsample_len = subsample_lens[0]
-
-product(tested_slopes, range(num_samples))
-
 samples = []
+for tested_slope in tested_slopes:
+    slope_samples = my_generator.generate_samples(tested_slope, gen_size, 
+                                              num_samples)
+    samples.extend([(list(sample), tested_slope, id_draw) 
+                    for id_draw, sample in enumerate(slope_samples)])
+# Build the srest of the parameters
+method_parameters = [(subsample_lens[i], mtld_thresholds[i], 
+                        num_subsamples)
+                    for i in range(len(subsample_lens))]
+parameters_list = list(product(samples, method_parameters))
 
-[my_generator.generate_samples(tested_slope, gen_size, 
-                                        num_samples)
-                    for tested_slope, id_draw in 
-                    product(tested_slopes, range(num_samples))]
+# Safeguard for mac version
+if __name__ == '__main__':
+    # Compute the results
+    with mp.Pool(n_cpu) as my_pool:
+        pool_results = my_pool.map(compute_ld_indice, parameters_list)
+
+    # Build a dataframe from results and write it
+    meta_var = [(p[0][1], p[1][0], p[1][1], p[0][2]) for p in parameters_list]
+    results_df = pd.concat([pd.DataFrame(meta_var), 
+                            pd.DataFrame(pool_results)], 
+                            axis=1, ignore_index=True)
+    
+    results_df.columns = ["slope", "subsample_len", "mtld_thresholds", 
+                          "id_draw", "sample_entropy","subsample_entropy_rdm", 
+                          "subsample_entropy_mav", "exp_variety", "mtld"]
+    results_df.to_csv(results_file_path, index=False)
 
