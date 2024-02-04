@@ -1,13 +1,13 @@
 import os
+import sys
+import pandas as pd
+import numpy as np
 from collections import Counter
 from LTTL.Utils import get_expected_subsample_variety
 from lexical_diversity import tokenize, sample_entropy, subsample_entropy, \
     MTLD,  draw_reduced_sample
-import numpy as np
 import multiprocessing as mp
 from itertools import product
-import pandas as pd
-import sys
 
 # -------------------------------
 # --- SCRIPT PARAMETERS
