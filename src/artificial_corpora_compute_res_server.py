@@ -24,13 +24,13 @@ results_folder_path = "../results/ac_results_4/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Tested slopes
-tested_slopes = np.linspace(-0.9, -1.7, 20)
+tested_slopes = np.linspace(-0.9, -1.7, 81)
 # Generated size
-gen_size = 1000
+gen_size = 5000
 # Number of samples
 num_samples = 10
 # The length of subsamples / mtld thresholds
-subsample_lens = [10, 50, 100, 200, 500]
+subsample_lens = [50, 100, 500, 1000, 2000]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
 # Number of subsamples
 num_subsamples = 10
