@@ -22,7 +22,7 @@ results_folder_path = "../results/ac_results_1/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Tested slopes
-tested_slopes = np.linspace(-1, -2, 20)
+tested_slopes = np.linspace(-0.9, -1.7, 20)
 # Generated size
 gen_size = 10000
 # Number of samples
