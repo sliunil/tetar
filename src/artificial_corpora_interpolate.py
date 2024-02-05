@@ -31,7 +31,7 @@ sorted_names = ld_stat_df["name"].values
 sorted_groups = ld_stat_df["group"].values
 
 # Create cmap
-color_map = cm.get_cmap("cool", len(sorted_names))
+color_map = cm.get_cmap("binary", len(sorted_names))
 
 # Loop on all files
 real_fig, real_ax = plt.subplots()
@@ -61,7 +61,9 @@ my_generator = TextGenerator()
 my_generator.fit(slopes, intercepts, shifts)
     
 # Slope space to explore
-tested_slopes = np.linspace(np.min(slopes), np.max(slopes), len(sorted_names))
+margin = 0.1
+tested_slopes = np.linspace(np.min(slopes)-margin, np.max(slopes)+margin, 
+                            len(sorted_names))
 arti_fig, arti_ax = plt.subplots()
 for i, tested_slope in enumerate(tested_slopes):
     slope, intercept, shift = my_generator.get_parameters(tested_slope)
@@ -74,7 +76,8 @@ plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes), np.max(slopes)),
                                cmap=color_map), ax=real_ax, label="Slope")
 plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes), np.max(slopes)), 
                                cmap=color_map), ax=esti_ax, label="Slope")
-plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes), np.max(slopes)), 
+plt.colorbar(cm.ScalarMappable(Normalize(np.min(slopes)-margin, 
+                                         np.max(slopes)+margin), 
                                cmap=color_map), ax=arti_ax, label="Slope")
 real_ax.set_xlabel("log(rank)")
 real_ax.set_ylabel("log(frequency)")
