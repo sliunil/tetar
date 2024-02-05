@@ -9,6 +9,8 @@ from lexical_diversity import TextGenerator, sample_entropy, \
 import multiprocessing as mp
 from itertools import product
 
+
+
 # -------------------------------
 # --- SCRIPT PARAMETERS
 # -------------------------------
@@ -18,7 +20,7 @@ input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
 # The corpora folder path
 corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
-results_folder_path = "../results/ac_results_3/all_files"
+results_folder_path = "../results/ac_results_4/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Tested slopes
@@ -32,6 +34,8 @@ subsample_lens = [10, 50, 100, 200, 500]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
 # Number of subsamples
 num_subsamples = 10
+
+
 
 # -------------------------------
 # --- CODE
