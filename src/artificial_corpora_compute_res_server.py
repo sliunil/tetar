@@ -24,7 +24,7 @@ results_file_prefix = "sample_size"
 # Tested slopes
 tested_slopes = np.linspace(-0.9, -1.7, 20)
 # Generated size
-gen_size = 10000
+gen_size = 5000
 # Number of samples
 num_samples = 10
 # The length of subsamples / mtld thresholds

@@ -6,7 +6,7 @@ import pandas as pd
 # -------------------------------
 
 input_folder_path = "ac_results_1/all_files"
-output_file_path = "ac_results_1/ac_50-1001_10-500.csv"
+output_file_path = "ac_results_1/ac_1_merge.csv"
 
 # -------------------------------
 # --- CODE
