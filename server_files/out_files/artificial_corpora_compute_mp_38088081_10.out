@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "artificial_corpora_compute_res_server.py", line 119, in <module>
+    os.makedirs(results_folder_path) 
+  File "/usr/lib64/python3.6/os.py", line 220, in makedirs
+    mkdir(name, mode)
+FileExistsError: [Errno 17] File exists: '../results/ac_results_1/all_files'
