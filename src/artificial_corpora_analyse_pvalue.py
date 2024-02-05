@@ -12,6 +12,7 @@ output_folder_path = "../results"
 output_file_prefix = "ac_pvalue_plot"
 min_prop_to_compute_mtld = 0.6
 shift_value = -1
+rolling_value = 10
 
 
 # -------------------------------
@@ -66,9 +67,9 @@ for measure_name_id, measure_name in enumerate(measure_names):
         sx_s = measure_std.shift(shift_value)
         val = np.abs(mx - mx_s) * np.sqrt(nx + nx_s - 2) \
             / np.sqrt((1/nx + 1/nx_s)*(nx*sx**2 + nx_s*sx_s**2))
+        val = val.rolling(rolling_value).mean()
         pval = 2*(1 - t.cdf(val, df=(nx + nx_s - 2)))
         
-
         # Plot it 
         if not measure_name == 'sample_entropy':
             plt.plot(measure_mean.index, pval,
