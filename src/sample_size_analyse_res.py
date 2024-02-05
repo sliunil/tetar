@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/sample_size/results_large/sample_size_2001-29000_50-5000.csv"
+input_file_path = "../results/sample_size/results_large/large_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "sample_size_plot"
 min_prop_to_compute_mtld = 0.6
@@ -23,12 +23,15 @@ sample_size_df = pd.read_csv(input_file_path)
 
 # Get genres (color)
 genres = sample_size_df.genre.unique()
-color_map = cm.get_cmap("hsv", len(genres) + 1)
+genres.sort()
+color_map = cm.get_cmap("binary", len(genres) + 1)
+markers = ['o', 'x', 'v']
+fillstyles = ['full', 'none', 'none']
 
 # Get measure names 
 measure_names = sample_size_df.columns.to_numpy()[6:]
-measure_clean_names = ["Sample Entropy", "Subsampled Entropy (rdm)", 
-                       "Subsampled Entropy (mav)", "HDD", 
+measure_clean_names = ["Sample Entropy", "Subsample Entropy (rdm)", 
+                       "Subsample Entropy (mav)", "HD-D", 
                        "MTLD"]
 
 for measure_name_id, measure_name in enumerate(measure_names):
@@ -36,8 +39,10 @@ for measure_name_id, measure_name in enumerate(measure_names):
     # Get subsample lengths (linewidth)
     if not measure_name == 'mtld':
         subsample_lens = sample_size_df.subsample_len.unique()
+        subsample_lens = subsample_lens[::2]
     else:
         subsample_lens = sample_size_df.mtld_thresholds.unique()
+        subsample_lens = subsample_lens[1:-1]
     linestyles = [(0, (3*i+1, 0.5*i+1)) for i, _ in enumerate(subsample_lens)]
     linestyles[-1] = 'solid'
     
@@ -76,15 +81,19 @@ for measure_name_id, measure_name in enumerate(measure_names):
                         label=subsample_len)
             if subsample_len_id == len(subsample_lens) - 1:
                 plt.plot(measure_mean.index, measure_mean.values,
-                        color=color_map(genre_id),
+                        color=color_map(genre_id+1),
                         linestyle=linestyles[subsample_len_id],
-                        label=genre)
+                        label=genre,
+                        marker=markers[genre_id], 
+                        fillstyle=fillstyles[genre_id])
             plt.errorbar(measure_mean.index, measure_mean.values, 
                         yerr=measure_std.values*1.96/np.sqrt(n_theo_tests), 
-                        color=color_map(genre_id),
-                        linestyle=linestyles[subsample_len_id])
-    plt.xlabel("Sample size")
+                        color=color_map(genre_id+1),
+                        linestyle=linestyles[subsample_len_id],
+                        marker=markers[genre_id], 
+                        fillstyle=fillstyles[genre_id])
+    plt.xlabel("Sample length")
     plt.ylabel(measure_clean_names[measure_name_id])
-    plt.legend(loc='upper right', fontsize='5')
+    plt.legend(loc='upper right', fontsize='8')
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{measure_name}.png", 
                 dpi=1200)
