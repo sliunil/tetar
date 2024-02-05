@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/artificial_corpora/ac_results_1/ac_50-1001_10-500.csv"
+input_file_path = "../results/artificial_corpora/ac_results_1/ac_1_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "ac_plot"
 min_prop_to_compute_mtld = 0.6
@@ -58,10 +58,15 @@ for measure_name_id, measure_name in enumerate(measure_names):
                             < min_prop_to_compute_mtld] = np.nan
 
         # Plot it 
-        plt.plot(measure_mean.index, measure_mean.values,
-                 color="black",
-                 linestyle=linestyles[subsample_len_id],
-                 label=subsample_len)
+        if not measure_name == 'sample_entropy':
+            plt.plot(measure_mean.index, measure_mean.values,
+                    color="black",
+                    linestyle=linestyles[subsample_len_id],
+                    label=subsample_len)
+        else:
+            plt.plot(measure_mean.index, measure_mean.values,
+                    color="black",
+                    linestyle=linestyles[0])
             
         plt.errorbar(measure_mean.index, measure_mean.values, 
                     yerr=measure_std.values*1.96/np.sqrt(n_theo_tests), 
@@ -70,6 +75,6 @@ for measure_name_id, measure_name in enumerate(measure_names):
         
     plt.xlabel("Slope")
     plt.ylabel(measure_clean_names[measure_name_id])
-    plt.legend(loc='upper right', fontsize='5')
+    plt.legend(loc='upper right', fontsize='8')
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{measure_name}.png", 
                 dpi=1200)
