@@ -28,7 +28,7 @@ tested_slopes = np.linspace(-0.9, -1.7, 81)
 # Generated size
 gen_size = 5000
 # Number of samples
-num_samples = 10
+num_samples = 100
 # The length of subsamples / mtld thresholds
 subsample_lens = [50, 100, 500, 1000, 2000]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]

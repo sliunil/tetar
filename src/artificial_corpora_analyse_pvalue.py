@@ -1,17 +1,17 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm
-
+from scipy.stats import t
 
 # -------------------------------
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/artificial_corpora/ac_results_1/ac_1_merge.csv"
+input_file_path = "../results/artificial_corpora/ac_results_4/ac_4_merge.csv"
 output_folder_path = "../results"
-output_file_prefix = "ac_plot"
+output_file_prefix = "ac_pvalue_plot"
 min_prop_to_compute_mtld = 0.6
+shift_value = -1
 
 
 # -------------------------------
@@ -56,25 +56,37 @@ for measure_name_id, measure_name in enumerate(measure_names):
         n_tests = grpd_selected_df[measure_name].count()
         measure_mean.loc[n_tests / n_theo_tests 
                             < min_prop_to_compute_mtld] = np.nan
+        
+        # Pvalue computation
+        mx = measure_mean
+        mx_s = measure_mean.shift(shift_value)
+        nx = n_tests
+        nx_s = n_tests.shift(shift_value)
+        sx = measure_std
+        sx_s = measure_std.shift(shift_value)
+        val = np.abs(mx - mx_s) * np.sqrt(nx + nx_s - 2) \
+            / np.sqrt((1/nx + 1/nx_s)*(nx*sx**2 + nx_s*sx_s**2))
+        pval = 2*(1 - t.cdf(val, df=(nx + nx_s - 2)))
+        
 
         # Plot it 
         if not measure_name == 'sample_entropy':
-            plt.plot(measure_mean.index, measure_mean.values,
+            plt.plot(measure_mean.index, pval,
                     color="black",
                     linestyle=linestyles[subsample_len_id],
                     label=subsample_len)
         else:
-            plt.plot(measure_mean.index, measure_mean.values,
+            plt.plot(measure_mean.index, pval,
                     color="black",
                     linestyle=linestyles[0])
             
-        plt.errorbar(measure_mean.index, measure_mean.values, 
-                    yerr=measure_std.values*1.96/np.sqrt(n_theo_tests), 
-                    color="black",
-                    linestyle=linestyles[subsample_len_id])
+        # plt.errorbar(measure_mean.index, measure_mean.values, 
+        #             yerr=measure_std.values*1.96/np.sqrt(n_theo_tests), 
+        #             color="black",
+        #             linestyle=linestyles[subsample_len_id])
         
     plt.xlabel("Slope")
-    plt.ylabel(measure_clean_names[measure_name_id])
+    plt.ylabel(f"p-value for {measure_clean_names[measure_name_id]}")
     plt.legend(loc='upper right', fontsize='8')
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{measure_name}.png", 
                 dpi=1200)
