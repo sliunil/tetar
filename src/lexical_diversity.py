@@ -187,27 +187,28 @@ class TextGenerator:
         self.model_in_sh.fit(np.log(intercepts).reshape(-1, 1), np.log(shifts))
 
     # Plot the relationships
-    def plot(self, groups=None):
+    def plot(self, groups=None, which_cmap="binary"):
         
         # Group colors 
         if groups is not None:
             gr_fact = np.unique(groups, return_inverse=True)
-            cmap = cm.get_cmap("hsv", len(gr_fact[0]) + 1)
-            gr_color = {fact:cmap(i) for i, fact in enumerate(gr_fact[0])}
-            legend_elements = [Line2D([0], [0], marker='o', color=cmap(i), 
-                                      label=gr_fact[0][i], 
-                                      markerfacecolor=cmap(i), markersize=5,
-                                      linewidth=0) 
-                               for i, _ in enumerate(gr_fact[0])]
+            markers = ['o', 'x', 'v']
+            fillstyles = ['full', 'none', 'none']
+            cmap = cm.get_cmap(which_cmap, len(gr_fact[0]) + 1)
             
         # Intercepts from slopes
         sorted_sl = np.sort(self.slopes)
         in_from_sl = self.model_sl_in.predict(sorted_sl.reshape(-1, 1))
         in_sl_fig, in_sl_ax = plt.subplots()
         if groups is not None:
-            in_sl_ax.scatter(self.slopes, self.intercepts, 
-                             c=groups.map(gr_color))
-            in_sl_ax.legend(handles=legend_elements)
+            for id_gr, gr in enumerate(gr_fact[0]): 
+                in_sl_ax.scatter(self.slopes[gr_fact[1] == id_gr], 
+                                 self.intercepts[gr_fact[1] == id_gr], 
+                                 c=cmap(id_gr+1), 
+                                 marker=markers[id_gr],
+                                 facecolors=fillstyles[id_gr], 
+                                 label=gr)
+            in_sl_ax.legend()
         else:
             in_sl_ax.scatter(self.slopes, self.intercepts)
         in_sl_ax.plot(sorted_sl, in_from_sl, color="black")
@@ -219,9 +220,14 @@ class TextGenerator:
             self.model_sl_sh.predict(np.log(-sorted_sl).reshape(-1, 1)))
         sh_sl_fig, sh_sl_ax = plt.subplots()
         if groups is not None:
-            sh_sl_ax.scatter(self.slopes, self.shifts, 
-                             c=groups.map(gr_color))
-            sh_sl_ax.legend(handles=legend_elements)
+            for id_gr, gr in enumerate(gr_fact[0]): 
+                sh_sl_ax.scatter(self.slopes[gr_fact[1] == id_gr], 
+                                 self.shifts[gr_fact[1] == id_gr], 
+                                 c=cmap(id_gr+1), 
+                                 marker=markers[id_gr],
+                                 facecolors=fillstyles[id_gr], 
+                                 label=gr)
+            sh_sl_ax.legend()
         else:
             sh_sl_ax.scatter(self.slopes, self.shifts)
         sh_sl_ax.plot(sorted_sl, sh_from_sl, color="black")
@@ -234,9 +240,14 @@ class TextGenerator:
             self.model_in_sh.predict(np.log(sorted_in).reshape(-1, 1)))
         sh_in_fig, sh_in_ax = plt.subplots()
         if groups is not None:
-            sh_in_ax.scatter(self.intercepts, self.shifts, 
-                             c=groups.map(gr_color))
-            sh_in_ax.legend(handles=legend_elements)
+            for id_gr, gr in enumerate(gr_fact[0]): 
+                sh_in_ax.scatter(self.intercepts[gr_fact[1] == id_gr], 
+                                 self.shifts[gr_fact[1] == id_gr], 
+                                 c=cmap(id_gr+1), 
+                                 marker=markers[id_gr],
+                                 facecolors=fillstyles[id_gr], 
+                                 label=gr)
+            sh_in_ax.legend()
         else:
             sh_in_ax.scatter(self.intercepts, self.shifts)
         sh_in_ax.plot(sorted_in, sh_from_in, color="black")
