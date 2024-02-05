@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/artificial_corpora/ac_results_2/ac_2_merge.csv"
+input_file_path = "../results/artificial_corpora/ac_results_1/ac_1_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "ac_plot"
 min_prop_to_compute_mtld = 0.6
@@ -23,8 +23,8 @@ ac_df = pd.read_csv(input_file_path)
 
 # Get measure names 
 measure_names = ac_df.columns.to_numpy()[4:]
-measure_clean_names = ["Sample Entropy", "Subsampled Entropy (rdm)", 
-                       "Subsampled Entropy (mav)", "HDD", 
+measure_clean_names = ["Sample Entropy", "Subsample Entropy (rdm)", 
+                       "Subsample Entropy (mav)", "HD-D", 
                        "MTLD"]
 
 for measure_name_id, measure_name in enumerate(measure_names):
