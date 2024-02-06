@@ -71,6 +71,9 @@ def subsample_entropy(sample, subsample_len, num_subsamples=1000,
 
     # Random subsampling...
     if mode == "random":
+        # --- Corrected for experiments
+        num_subsamples = sample_len-subsample_len+1
+        # --- End corrected for experiments
         my_num_subsamples = num_subsamples
         for _ in range(num_subsamples):
             entropy = sample_entropy(get_random_subsample(sample, 
