@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/sample_size/results_large/large_merge.csv"
+input_file_path = "../results/sample_size/results_small/small_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "sample_size_plot"
 min_prop_to_compute_mtld = 0.6
@@ -20,6 +20,8 @@ min_prop_to_compute_mtld = 0.6
 
 # Load dataset
 sample_size_df = pd.read_csv(input_file_path)
+# Rename literature in novels
+sample_size_df.loc[sample_size_df.genre == "literature", "genre"]= "novels"
 
 # Get genres (color)
 genres = sample_size_df.genre.unique()
