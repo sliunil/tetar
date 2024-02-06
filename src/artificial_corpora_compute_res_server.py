@@ -20,7 +20,7 @@ input_file_path = "../results/real_corpora/real_corpora_indices_20_10.csv"
 # The corpora folder path
 corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
-results_folder_path = "../results/acz_results_1/all_files"
+results_folder_path = "../results/acz_results_2/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Tested slopes
@@ -28,7 +28,7 @@ tested_slopes = np.linspace(-0.9, -1.6, 71)
 # Generated size
 gen_size = 5000
 # Number of samples
-num_samples = 100
+num_samples = 10
 # The length of subsamples / mtld thresholds
 subsample_lens = [50, 100, 500, 1000, 2000]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
