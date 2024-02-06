@@ -16,7 +16,7 @@ corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
 results_folder_path = "../results/"
 # Parameters...
-subsample_len = 20
+subsample_len = 5000
 num_subsamples = 10
 
 
