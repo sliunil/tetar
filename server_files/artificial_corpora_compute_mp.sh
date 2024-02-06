@@ -16,7 +16,7 @@
 #SBATCH --time 12:00:00 
 #SBATCH --export NONE
 
-#SBATCH --array=0-80
+#SBATCH --array=0-70
 
 module load gcc python
 

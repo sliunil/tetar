@@ -16,15 +16,15 @@ from itertools import product
 # -------------------------------
 
 # The file for the model
-input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_20_10.csv"
 # The corpora folder path
 corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
-results_folder_path = "../results/ac_results_4/all_files"
+results_folder_path = "../results/acz_results_1/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Tested slopes
-tested_slopes = np.linspace(-0.9, -1.7, 81)
+tested_slopes = np.linspace(-0.9, -1.6, 71)
 # Generated size
 gen_size = 5000
 # Number of samples
