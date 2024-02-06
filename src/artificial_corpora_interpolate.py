@@ -11,11 +11,13 @@ from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_20_10.csv"
 corpora_folder_path = "../data/real_corpora/cleaned"
 output_folder_path = "../results/artificial_corpora"
-# generated size
-gen_size = 10000
+# Generated size
+gen_size = 5000
+# Margin for slope exploration
+margin = 0.1
 
 
 # -------------------------------
@@ -43,7 +45,7 @@ for i, name in enumerate(sorted_names):
     
     sample = tokenize(content.lower())
     counter = Counter(sample)
-    ranks, frequencies, lm_model, shift = counter_to_zipf_data(counter)
+    ranks, frequencies, lm_model, shift = counter_to_zipf_data(counter, [0])
     real_ax.plot(np.log(ranks), np.log(frequencies), color=color_map(i), 
                  alpha=0.5)
     predicted_log_freq = np.log(tested_ranks + shift)*lm_model.coef_[0] \
@@ -61,7 +63,6 @@ my_generator = TextGenerator()
 my_generator.fit(slopes, intercepts, shifts)
     
 # Slope space to explore
-margin = 0.1
 tested_slopes = np.linspace(np.min(slopes)-margin, np.max(slopes)+margin, 
                             len(sorted_names))
 arti_fig, arti_ax = plt.subplots()

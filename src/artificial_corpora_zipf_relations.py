@@ -16,7 +16,6 @@ output_folder_path = "../results/artificial_corpora"
 
 # Load dataset
 ld_stat_df = pd.read_csv(input_file_path, index_col=0)
-ld_stat_df.loc[ld_stat_df.genre == "literature", "genre"]= "novels"
 
 # Get groups
 groups = ld_stat_df["group"]

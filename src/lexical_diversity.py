@@ -271,7 +271,7 @@ class TextGenerator:
             shift = np.exp(self.model_sl_sh.predict(
                 np.array(np.log(-slope)).reshape(-1, 1)))[0]
         else:
-            shift = np.repeat(0, len(slope))
+            shift = 0
         return slope, intercept, shift
     
     # Generate samples with defined slope
