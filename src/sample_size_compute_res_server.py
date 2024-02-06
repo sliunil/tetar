@@ -16,16 +16,16 @@ from itertools import product
 # The corpora folder path
 corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
-results_folder_path = "../results/results_small/all_files"
+results_folder_path = "../results/results_large/all_files"
 # File prefix 
 results_file_prefix = "sample_size"
 # Parameters
-# reduced_sample_sizes = np.logspace(np.log10(2000), np.log10(29000), 
-#                                    num=15).astype(int) + 1
-# subsample_lens = [50, 100, 500, 2000, 5000]
-reduced_sample_sizes = np.logspace(np.log10(51), np.log10(1000), 
-                                   num=15).astype(int)
-subsample_lens = [10, 50, 100, 200, 500]
+reduced_sample_sizes = np.logspace(np.log10(2000), np.log10(29000), 
+                                   num=15).astype(int) + 1
+subsample_lens = [50, 100, 500, 2000, 5000]
+# reduced_sample_sizes = np.logspace(np.log10(51), np.log10(1000), 
+#                                    num=15).astype(int)
+# subsample_lens = [10, 50, 100, 200, 500]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
 num_reduce_sample = 10
 num_subsamples = 10
