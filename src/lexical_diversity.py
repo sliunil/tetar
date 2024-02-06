@@ -183,8 +183,12 @@ class TextGenerator:
         self.intercepts = intercepts
         self.shifts = shifts
         self.model_sl_in.fit(slopes.reshape(-1, 1), intercepts)
-        self.model_sl_sh.fit(np.log(-slopes).reshape(-1, 1), np.log(shifts))
-        self.model_in_sh.fit(np.log(intercepts).reshape(-1, 1), np.log(shifts))
+        if np.sum(self.shifts) > 1e-10:
+            self.model_sl_sh.fit(np.log(-slopes).reshape(-1, 1), 
+                                 np.log(shifts))
+            self.model_in_sh.fit(np.log(intercepts).reshape(-1, 1), 
+                                 np.log(shifts))
+            
 
     # Plot the relationships
     def plot(self, groups=None, which_cmap="binary"):
@@ -216,29 +220,33 @@ class TextGenerator:
         in_sl_ax.set_ylabel("Intercept")
         
         # Shifts from slopes
-        sh_from_sl = np.exp(
-            self.model_sl_sh.predict(np.log(-sorted_sl).reshape(-1, 1)))
         sh_sl_fig, sh_sl_ax = plt.subplots()
+        if np.sum(self.shifts) > 1e-10:
+            sh_from_sl = np.exp(
+                self.model_sl_sh.predict(np.log(-sorted_sl).reshape(-1, 1)))
+            sh_sl_ax.plot(sorted_sl, sh_from_sl, color="black")
         if groups is not None:
             for id_gr, gr in enumerate(gr_fact[0]): 
                 sh_sl_ax.scatter(self.slopes[gr_fact[1] == id_gr], 
-                                 self.shifts[gr_fact[1] == id_gr], 
-                                 c=cmap(id_gr+1), 
-                                 marker=markers[id_gr],
-                                 facecolors=fillstyles[id_gr], 
-                                 label=gr)
+                                self.shifts[gr_fact[1] == id_gr], 
+                                c=cmap(id_gr+1), 
+                                marker=markers[id_gr],
+                                facecolors=fillstyles[id_gr], 
+                                label=gr)
             sh_sl_ax.legend()
         else:
             sh_sl_ax.scatter(self.slopes, self.shifts)
-        sh_sl_ax.plot(sorted_sl, sh_from_sl, color="black")
         sh_sl_ax.set_xlabel("Slope")
         sh_sl_ax.set_ylabel("Shift")
+            
 
         # Shifts from intercepts
-        sorted_in = np.sort(self.intercepts)
-        sh_from_in = np.exp(
-            self.model_in_sh.predict(np.log(sorted_in).reshape(-1, 1)))
         sh_in_fig, sh_in_ax = plt.subplots()
+        sorted_in = np.sort(self.intercepts)
+        if np.sum(self.shifts) > 1e-10:
+            sh_from_in = np.exp(
+                self.model_in_sh.predict(np.log(sorted_in).reshape(-1, 1)))
+            sh_in_ax.plot(sorted_in, sh_from_in, color="black")
         if groups is not None:
             for id_gr, gr in enumerate(gr_fact[0]): 
                 sh_in_ax.scatter(self.intercepts[gr_fact[1] == id_gr], 
@@ -250,7 +258,6 @@ class TextGenerator:
             sh_in_ax.legend()
         else:
             sh_in_ax.scatter(self.intercepts, self.shifts)
-        sh_in_ax.plot(sorted_in, sh_from_in, color="black")
         sh_in_ax.set_xlabel("Intercept")
         sh_in_ax.set_ylabel("Shift")
         
@@ -260,8 +267,11 @@ class TextGenerator:
     def get_parameters(self, slope):
         intercept = self.model_sl_in.predict(
             np.array(slope).reshape(-1, 1))[0]
-        shift = np.exp(self.model_sl_sh.predict(
-            np.array(np.log(-slope)).reshape(-1, 1)))[0]
+        if np.sum(self.shifts) > 1e-10:
+            shift = np.exp(self.model_sl_sh.predict(
+                np.array(np.log(-slope)).reshape(-1, 1)))[0]
+        else:
+            shift = np.repeat(0, len(slope))
         return slope, intercept, shift
     
     # Generate samples with defined slope
