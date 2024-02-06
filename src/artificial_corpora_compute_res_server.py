@@ -33,7 +33,7 @@ num_samples = 10
 subsample_lens = [50, 100, 500, 1000, 2000]
 mtld_thresholds = [0.84, 0.78, 0.72, 0.66, 0.6]
 # Number of subsamples
-num_subsamples_s = gen_size - np.array(subsample_lens) + 1
+num_subsamples = 10
 
 
 
@@ -96,7 +96,7 @@ samples = [(list(sample), tested_slope, id_draw)
            for id_draw, sample in enumerate(slope_samples)]
 # Build the srest of the parameters
 method_parameters = [(subsample_lens[i], mtld_thresholds[i], 
-                        num_subsamples_s[i])
+                        num_subsamples)
                     for i in range(len(subsample_lens))]
 parameters_list = list(product(samples, method_parameters))
 

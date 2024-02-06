@@ -7,12 +7,12 @@ from scipy.stats import t
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/artificial_corpora/acz_results_1/acz_1_merge.csv"
+input_file_path = "../results/artificial_corpora/acz_results_2/acz_2_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "acz_pvalue_plot"
 min_prop_to_compute_mtld = 0.6
 shift_value = -1
-rolling_value = 10
+rolling_value = 20
 
 
 # -------------------------------
@@ -79,16 +79,18 @@ for measure_name_id, measure_name in enumerate(measure_names):
         else:
             plt.plot(measure_mean.index, pval,
                     color="black",
-                    linestyle=linestyles[0])
+                    linestyle=linestyles[-1])
             
         # plt.errorbar(measure_mean.index, measure_mean.values, 
         #             yerr=measure_std.values*1.96/np.sqrt(n_theo_tests), 
         #             color="black",
         #             linestyle=linestyles[subsample_len_id])
         
+    
+    if not measure_name == 'sample_entropy':
+        plt.legend(loc='upper right', fontsize='8')
     plt.xlabel("Slope")
     plt.ylabel(f"p-value for {measure_clean_names[measure_name_id]}")
-    plt.legend(loc='upper right', fontsize='8')
     plt.yscale("log")
     plt.axhline(y=0.01, color="black")
     plt.ylim([0, 0.1])
