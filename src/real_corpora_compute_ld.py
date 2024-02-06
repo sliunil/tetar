@@ -5,6 +5,8 @@ from lexical_diversity import tokenize, sample_entropy, subsample_entropy, \
     MTLD,  counter_to_zipf_data
 import pandas as pd
 
+
+
 # -------------------------------
 # --- SCRIPT PARAMETERS
 # -------------------------------
@@ -14,7 +16,7 @@ corpora_folder_path = "../data/real_corpora/cleaned"
 # The results folder path
 results_folder_path = "../results/"
 # Parameters...
-subsample_len = 200
+subsample_len = 20
 num_subsamples = 10
 
 
@@ -66,7 +68,8 @@ for subfolder_name in subfolder_names:
         m_entrpy_mav, sd_entrpy_mav = \
             subsample_entropy(sample, subsample_len, num_subsamples, 
                               mode="window")
-        _, _, lm_model, z_shift = counter_to_zipf_data(counter)
+        # Set the shift to 0
+        _, _, lm_model, z_shift = counter_to_zipf_data(counter, shifts=[0])
         
         # Store results 
         doc_result_df = \

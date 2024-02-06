@@ -6,7 +6,7 @@ from lexical_diversity import TextGenerator
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora/real_corpora_indices_200_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_20_10.csv"
 output_folder_path = "../results/artificial_corpora"
 
 
@@ -16,6 +16,7 @@ output_folder_path = "../results/artificial_corpora"
 
 # Load dataset
 ld_stat_df = pd.read_csv(input_file_path, index_col=0)
+ld_stat_df.loc[ld_stat_df.genre == "literature", "genre"]= "novels"
 
 # Get groups
 groups = ld_stat_df["group"]
