@@ -7,9 +7,9 @@ from scipy.stats import t
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/artificial_corpora/ac_results_4/ac_4_merge.csv"
+input_file_path = "../results/artificial_corpora/acz_results_1/acz_1_merge.csv"
 output_folder_path = "../results"
-output_file_prefix = "ac_pvalue_plot"
+output_file_prefix = "acz_pvalue_plot"
 min_prop_to_compute_mtld = 0.6
 shift_value = -1
 rolling_value = 10
@@ -89,5 +89,8 @@ for measure_name_id, measure_name in enumerate(measure_names):
     plt.xlabel("Slope")
     plt.ylabel(f"p-value for {measure_clean_names[measure_name_id]}")
     plt.legend(loc='upper right', fontsize='8')
+    plt.yscale("log")
+    plt.axhline(y=0.01, color="black")
+    plt.ylim([0, 0.1])
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{measure_name}.png", 
                 dpi=1200)
