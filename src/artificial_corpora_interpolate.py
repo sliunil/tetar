@@ -11,7 +11,7 @@ from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora/real_corpora_indices_20_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_2_zm.csv"
 corpora_folder_path = "../data/real_corpora/cleaned"
 output_folder_path = "../results/artificial_corpora"
 # Generated size
