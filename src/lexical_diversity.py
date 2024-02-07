@@ -183,13 +183,13 @@ def counter_to_zipf_data(counter, compute_shift=True):
     
     return ranks, frequencies, zipf_params
 
-def generate_samples(self, slope, intercept, shift, sample_size, num_samples=1):
+def generate_samples(slope, shift, variety, length, num_samples=1):
         """Generate samples following a zipf-mandelbrot distribution"""
-        types = np.arange(1, sample_size+1)
-        estimated_freq = intercept*(types + shift)**slope
+        ranks = np.arange(1, variety+1)
+        estimated_freq = (ranks + shift)**slope
         probabilities = estimated_freq / np.sum(estimated_freq)
         samples = np.array([np.where(
-            np.random.multinomial(1, probabilities, sample_size) > 0)[1] + 1 
+            np.random.multinomial(1, probabilities, length) > 0)[1] + 1 
                             for _ in range(num_samples)])
         return samples
 
