@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import Normalize
 from collections import Counter
-from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
+from lexical_diversity import tokenize, counter_to_zipf_data
 
 
 # -------------------------------
@@ -14,10 +14,6 @@ from lexical_diversity import tokenize, counter_to_zipf_data, TextGenerator
 input_file_path = "../results/real_corpora/real_corpora_indices_4_zm.csv"
 corpora_folder_path = "../data/real_corpora/cleaned"
 output_folder_path = "../results/artificial_corpora"
-# Margin for slope exploration
-margin = 0.1
-compute_shift = True
-
 
 
 # -------------------------------
@@ -44,15 +40,10 @@ for i, name in enumerate(sorted_names):
     
     sample = tokenize(content.lower())
     counter = Counter(sample)
-    ranks, frequencies, zipf_params = counter_to_zipf_data(counter, 
-                                                           compute_shift)
-    if compute_shift:
-        shift = zipf_params[1]
-    else:
-        shift = 0
+    ranks, frequencies, zipf_params = counter_to_zipf_data(counter)
     real_ax.plot(np.log(ranks), np.log(frequencies), color=color_map(i), 
                  alpha=0.5)
-    predicted_log_freq = np.exp(np.log(ranks + shift)*zipf_params[0])
+    predicted_log_freq = np.exp(np.log(ranks + zipf_params[1])*zipf_params[0])
     predicted_log_freq = np.log(predicted_log_freq / sum(predicted_log_freq) \
         * sum(frequencies))
     esti_ax.plot(np.log(ranks), predicted_log_freq, color=color_map(i),
