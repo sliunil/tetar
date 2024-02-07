@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/sample_size/results_large/large_merge.csv"
+input_file_path = "../results/sample_size/results_small/small_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "sample_size_plot"
 min_prop_to_compute_mtld = 0.6
@@ -98,4 +98,4 @@ for measure_name_id, measure_name in enumerate(measure_names):
     plt.ylabel(measure_clean_names[measure_name_id])
     plt.legend(loc='upper right', fontsize='8')
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{measure_name}.png", 
-                dpi=1200)
+                dpi=300)
