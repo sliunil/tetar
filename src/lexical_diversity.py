@@ -1,13 +1,7 @@
 from collections import Counter
-import math
-from pathlib import Path
 import random
 import re
 import numpy as np
-from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
-from matplotlib import cm
-from matplotlib.lines import Line2D
 from scipy.optimize import curve_fit
 
 __version__ = 0.2
