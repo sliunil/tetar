@@ -19,7 +19,6 @@ results_folder_path = "../results/"
 subsample_len = 5000
 num_subsamples = 10
 compute_all = False
-compute_shift = True
 
 # -------------------------------
 # --- CODE
@@ -74,12 +73,7 @@ for subfolder_name in subfolder_names:
             m_entrpy_rdm, sd_entrpy_rdm, m_entrpy_mav, sd_entrpy_mav, \
                 exp_variety, mtld = 0, 0, 0, 0, 0, 0
         # Set the shift to 0
-        _, _, zipf_param = counter_to_zipf_data(counter, compute_shift)
-        if compute_shift:
-            shift = zipf_param[1]
-        else:
-            shift = 0
-        
+        _, _, zipf_param = counter_to_zipf_data(counter)
         
         # Store results 
         doc_result_df = \

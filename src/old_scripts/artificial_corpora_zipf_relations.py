@@ -1,6 +1,5 @@
 import pandas as pd
 from lexical_diversity import TextGenerator
-import numpy as np
 
 
 # -------------------------------

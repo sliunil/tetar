@@ -73,7 +73,7 @@ m_entrpy_mav, sd_entrpy_mav = \
     subsample_entropy(sample, subsample_len, num_subsamples, 
                         mode="window")
 # Set the shift to 0
-_, _, lm_model, z_shift = counter_to_zipf_data(counter, shifts=[0])
+_, _, zipf_param = counter_to_zipf_data(counter)
         
 # Store results 
 results_df = \
@@ -90,9 +90,9 @@ results_df = \
         "exp_variety": [get_expected_subsample_variety(counter, 
                                                         subsample_len)],
         "MTLD": [MTLD(sample)], 
-        "zipf_intercept": [lm_model.intercept_], 
-        "zipf_slope": [lm_model.coef_[0]],
-        "zipf_shift": [z_shift]})
+        "zipf_intercept": [1], 
+        "zipf_slope": [zipf_param[0]],
+        "zipf_shift": [zipf_param[1]]})
         
 # Save results 
 results_df.to_csv(f"{results_folder_path}/{results_file_prefix}_" 
