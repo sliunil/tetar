@@ -8,6 +8,7 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.lines import Line2D
+from scipy.optimize import curve_fit
 
 __version__ = 0.2
 __authors__ = ["aris.xanthos@unil.ch", "guillaume.guex@unil.ch"]
@@ -136,7 +137,7 @@ def MTLD(sample, ttr_threshold=.72):
     """Wrapper for the MTLD method in taaled."""
     return LD_OBJECT.MTLD(sample, ttrval=ttr_threshold)
 
-def counter_to_zipf_data(counter, shifts=np.linspace(0, 200, 401)):
+def counter_to_zipf_data(counter, compute_shift=True):
     """Compute zipf data from a counter: give ranks, frequencies
     linear model fitted on (shifted) log-rank vs log-freq, and shift of ranks"""
     
@@ -145,26 +146,52 @@ def counter_to_zipf_data(counter, shifts=np.linspace(0, 200, 401)):
     frequencies.sort(reverse=True)
 
     # Compute log_rank and log_freq 
-    ranks = np.array(range(1, len(frequencies) + 1))
-    log_freqs = np.log(frequencies)
-        
-    # Linear regression model 
-    lm_model = LinearRegression()
-    scores = []
-    mses = []
-    for shift in shifts:
-        shifted_log_rank = np.log(ranks + shift)
-        lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freqs)
-        scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), 
-                                     np.log(frequencies)))
-        freq_estimates = np.exp(
-            lm_model.predict(shifted_log_rank.reshape(-1, 1)))
-        mses.append(np.mean((freq_estimates - frequencies)**2))
-    estimated_shift = shifts[np.where(mses == np.min(mses))[0][0]]
-    lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), 
-                 np.log(frequencies))
+    ranks = np.array(range(1, len(frequencies) + 1)).astype(float)
     
-    return ranks, frequencies, lm_model, estimated_shift
+    # log_freqs = np.log(frequencies)   
+    # Linear regression model 
+    # lm_model = LinearRegression()
+    # scores = []
+    # mses = []
+    
+    # for shift in shifts:
+    #     shifted_log_rank = np.log(ranks + shift)
+    #     lm_model.fit(shifted_log_rank.reshape(-1, 1), log_freqs)
+    #     scores.append(lm_model.score(shifted_log_rank.reshape(-1, 1), 
+    #                                  np.log(frequencies)))
+    #     freq_estimates = np.exp(
+    #         lm_model.predict(shifted_log_rank.reshape(-1, 1)))
+    #     mses.append(np.mean((freq_estimates - frequencies)**2))
+    # estimated_shift = shifts[np.where(mses == np.min(mses))[0][0]]
+    # lm_model.fit(np.log(ranks + estimated_shift).reshape(-1, 1), 
+    #              np.log(frequencies))
+    
+    # The function to fit
+    if not compute_shift:
+        def power_law(x, a, num_types):
+            return x**a
+        zipf_params, _ = curve_fit(f=power_law, 
+                                   xdata=ranks, ydata=frequencies, 
+                                   p0=[-1, 0], bounds=(-np.inf, np.inf))
+    else:
+        def shifted_power_law(x, a, b):
+            h = np.sum((ranks + b)**a)
+            return np.sum(frequencies)*(x + b)**a / h
+        zipf_params, _ = curve_fit(f=shifted_power_law, 
+                                   xdata=ranks, ydata=frequencies, 
+                                   p0=[-1, 3], bounds=(-np.inf, np.inf))
+    
+    return ranks, frequencies, zipf_params
+
+def generate_samples(self, slope, intercept, shift, sample_size, num_samples=1):
+        """Generate samples following a zipf-mandelbrot distribution"""
+        types = np.arange(1, sample_size+1)
+        estimated_freq = intercept*(types + shift)**slope
+        probabilities = estimated_freq / np.sum(estimated_freq)
+        samples = np.array([np.where(
+            np.random.multinomial(1, probabilities, sample_size) > 0)[1] + 1 
+                            for _ in range(num_samples)])
+        return samples
 
 class TextGenerator:
     """A class to create artificial texts, following a zipf-mandelbrot 
@@ -188,9 +215,9 @@ class TextGenerator:
         self.model_sl_in.fit(slopes.reshape(-1, 1), intercepts)
         if np.sum(self.shifts) > 1e-10:
             self.model_sl_sh.fit(np.log(-slopes).reshape(-1, 1), 
-                                 np.log(shifts))
+                                 np.log(np.abs(shifts)))
             self.model_in_sh.fit(np.log(intercepts).reshape(-1, 1), 
-                                 np.log(shifts))
+                                 np.log(np.abs(shifts)))
             
 
     # Plot the relationships

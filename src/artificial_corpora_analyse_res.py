@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/artificial_corpora/acz_results_2/acz_2_merge.csv"
+input_file_path = "../results/artificial_corpora/acz_results_3/acz_3_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "acz_plot"
 min_prop_to_compute_mtld = 0.6

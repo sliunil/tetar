@@ -18,8 +18,8 @@ results_folder_path = "../results/"
 # Parameters...
 subsample_len = 5000
 num_subsamples = 10
-
-
+compute_all = False
+compute_shift = True
 
 # -------------------------------
 # --- CODE
@@ -37,7 +37,6 @@ results_df = pd.DataFrame(columns=["name",
                                    "sd_subsample_entropy_mav", 
                                    "exp_variety",
                                    "MTLD", 
-                                   "zipf_intercept", 
                                    "zipf_slope", 
                                    "zipf_shift"])
 
@@ -63,13 +62,24 @@ for subfolder_name in subfolder_names:
         # Compute results
         sample = tokenize(content.lower())
         counter = Counter(sample)
-        m_entrpy_rdm, sd_entrpy_rdm = subsample_entropy(sample, subsample_len, 
-                                                        num_subsamples)
-        m_entrpy_mav, sd_entrpy_mav = \
-            subsample_entropy(sample, subsample_len, num_subsamples, 
-                              mode="window")
+        if compute_all:
+            m_entrpy_rdm, sd_entrpy_rdm = subsample_entropy(sample, subsample_len, 
+                                                            num_subsamples)
+            m_entrpy_mav, sd_entrpy_mav = \
+                subsample_entropy(sample, subsample_len, num_subsamples, 
+                                mode="window")
+            exp_variety = get_expected_subsample_variety(counter, subsample_len)
+            mtld = MTLD(sample)
+        else:
+            m_entrpy_rdm, sd_entrpy_rdm, m_entrpy_mav, sd_entrpy_mav, \
+                exp_variety, mtld = 0, 0, 0, 0, 0, 0
         # Set the shift to 0
-        _, _, lm_model, z_shift = counter_to_zipf_data(counter, shifts=[0])
+        _, _, zipf_param = counter_to_zipf_data(counter, compute_shift)
+        if compute_shift:
+            shift = zipf_param[1]
+        else:
+            shift = 0
+        
         
         # Store results 
         doc_result_df = \
@@ -83,14 +93,14 @@ for subfolder_name in subfolder_names:
                 "sd_subsample_entropy_rdm": [sd_entrpy_rdm],
                 "m_subsample_entropy_mav": [m_entrpy_mav], 
                 "sd_subsample_entropy_mav": [sd_entrpy_mav], 
-                "exp_variety": [get_expected_subsample_variety(counter, 
-                                                               subsample_len)],
-                "MTLD": [MTLD(sample)], 
-                "zipf_intercept": [lm_model.intercept_], 
-                "zipf_slope": [lm_model.coef_[0]],
-                "zipf_shift": [z_shift]})
+                "exp_variety": [exp_variety],
+                "MTLD": [mtld], 
+                "zipf_intercept": [1], 
+                "zipf_slope": [zipf_param[0]],
+                "zipf_shift": [zipf_param[1]]})
         results_df = pd.concat([results_df, doc_result_df], ignore_index=True)
         
 # Save dataset 
 results_df.to_csv(f"{results_folder_path}/real_corpora_indices_"
                   f"{subsample_len}_{num_subsamples}.csv")
+

@@ -1,12 +1,13 @@
 import pandas as pd
 from lexical_diversity import TextGenerator
+import numpy as np
 
 
 # -------------------------------
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/real_corpora/real_corpora_indices_20_10.csv"
+input_file_path = "../results/real_corpora/real_corpora_indices_4_zm.csv"
 output_folder_path = "../results/artificial_corpora"
 
 
@@ -31,6 +32,6 @@ my_generator.fit(slopes, intercepts, shifts)
 
 # Plot the relationships
 in_sl_fig, _, sh_sl_fig, _, sh_in_fig, _ = my_generator.plot(groups)
-in_sl_fig.savefig(f"{output_folder_path}/slope_intercept.png", dpi=1200)
-sh_sl_fig.savefig(f"{output_folder_path}/slope_shift.png", dpi=1200)
-sh_in_fig.savefig(f"{output_folder_path}/intercept_shift.png", dpi=1200)
+in_sl_fig.savefig(f"{output_folder_path}/slope_intercept.png", dpi=300)
+sh_sl_fig.savefig(f"{output_folder_path}/slope_shift.png", dpi=300)
+sh_in_fig.savefig(f"{output_folder_path}/intercept_shift.png", dpi=300)
