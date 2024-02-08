@@ -41,13 +41,10 @@ for i, name in enumerate(sorted_names):
     sample = tokenize(content.lower())
     counter = Counter(sample)
     ranks, frequencies, zipf_params = counter_to_zipf_data(counter)
-    real_ax.plot(np.log(ranks), np.log(frequencies), color=color_map(i), 
-                 alpha=0.5)
-    predicted_log_freq = np.exp(np.log(ranks + zipf_params[1])*zipf_params[0])
-    predicted_log_freq = np.log(predicted_log_freq / sum(predicted_log_freq) \
-        * sum(frequencies))
-    esti_ax.plot(np.log(ranks), predicted_log_freq, color=color_map(i),
-                 alpha=0.5)
+    real_ax.plot(ranks, frequencies, color=color_map(i), alpha=0.5)
+    predicted_freq = np.exp(np.log(ranks + zipf_params[1])*zipf_params[0])
+    predicted_freq = predicted_freq / sum(predicted_freq)*sum(frequencies)
+    esti_ax.plot(ranks, predicted_freq, color=color_map(i), alpha=0.5)
     
 # Extract quantities of interest
 slopes = ld_stat_df["zipf_slope"].to_numpy()
@@ -68,8 +65,8 @@ slope_fig, slope_ax = plt.subplots()
 for i, tested_slope in enumerate(tested_slopes):
     predicted_freq = (tested_ranks + mean_shift)**tested_slope
     predicted_freq = predicted_freq / sum(predicted_freq) * mean_length 
-    slope_ax.plot(np.log(tested_ranks), np.log(predicted_freq), 
-                  color=color_map(i), alpha=0.5)
+    slope_ax.plot(tested_ranks, predicted_freq, color=color_map(i), 
+                  alpha=0.5)
     
 # The shift space 
 tested_shifts = np.linspace(np.min(shifts), np.max(shifts), 
@@ -78,8 +75,7 @@ shift_fig, shift_ax = plt.subplots()
 for i, tested_shift in enumerate(tested_shifts):
     predicted_freq = (tested_ranks + tested_shift)**mean_slope
     predicted_freq = predicted_freq / sum(predicted_freq) * mean_length 
-    shift_ax.plot(np.log(tested_ranks), np.log(predicted_freq), 
-                  color=color_map(i), alpha=0.5)
+    shift_ax.plot(tested_ranks, predicted_freq, color=color_map(i), alpha=0.5)
     
 # The variety 
 tested_varieties = np.linspace(ld_stat_df["variety"].min(), 
@@ -90,8 +86,7 @@ for i, tested_variety in enumerate(tested_varieties):
     ranks = np.arange(1, tested_variety+1)
     predicted_freq = (ranks + mean_shift)**mean_slope
     predicted_freq = predicted_freq / sum(predicted_freq) * mean_length 
-    variety_ax.plot(np.log(ranks), np.log(predicted_freq), 
-                    color=color_map(i), alpha=0.5)
+    variety_ax.plot(ranks, predicted_freq, color=color_map(i), alpha=0.5)
     
 # Update and save plots 
 plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_slopes), 
@@ -103,16 +98,26 @@ plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_shifts),
 plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_varieties), 
                                          np.max(tested_varieties)), 
                                cmap=color_map), ax=variety_ax, label="Variety")
-real_ax.set_xlabel("log(rank)")
-real_ax.set_ylabel("log(frequency)")
-esti_ax.set_xlabel("log(rank)")
-esti_ax.set_ylabel("log(frequency)")
-slope_ax.set_xlabel("log(rank)")
-slope_ax.set_ylabel("log(frequency)")
-shift_ax.set_xlabel("log(rank)")
-shift_ax.set_ylabel("log(frequency)")
-variety_ax.set_xlabel("log(rank)")
-variety_ax.set_ylabel("log(frequency)")
+real_ax.set_xlabel("Rank")
+real_ax.set_ylabel("Frequency")
+esti_ax.set_xlabel("Rank")
+esti_ax.set_ylabel("Frequency")
+slope_ax.set_xlabel("Rank")
+slope_ax.set_ylabel("Frequency")
+shift_ax.set_xlabel("Rank")
+shift_ax.set_ylabel("Frequency")
+variety_ax.set_xlabel("Rank")
+variety_ax.set_ylabel("Frequency")
+real_ax.set_xscale("log")
+real_ax.set_yscale("log")
+esti_ax.set_xscale("log")
+esti_ax.set_yscale("log")
+slope_ax.set_xscale("log")
+slope_ax.set_yscale("log")
+shift_ax.set_xscale("log")
+shift_ax.set_yscale("log")
+variety_ax.set_xscale("log")
+variety_ax.set_yscale("log")
 real_fig.savefig(f"{output_folder_path}/real_distrib.png", dpi=300)
 esti_fig.savefig(f"{output_folder_path}/interpolated_distrib.png", dpi=300)
 slope_fig.savefig(f"{output_folder_path}/slope_distrib.png", dpi=300)
