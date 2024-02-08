@@ -12,7 +12,7 @@ input_file_path = "../results/artificial_corpora/zm_res_1/zm_1_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "pzm_plot"
 min_prop_to_compute_mtld = 0.6
-shift_value = -1
+shift_value = 1
 rolling_value = 3
 
 
@@ -69,11 +69,11 @@ for id_type, graph_type in enumerate(graph_types):
                  color=color_map(measure_name_id+1),
                  marker=markers[measure_name_id], 
                  label=measure_clean_names[measure_name_id])
-        
-    plt.legend(loc='lower right', fontsize='8')
-    plt.xlabel(graph_type_names[id_type])
+    if graph_type == 'variety':
+        plt.legend(fontsize='14')
+    plt.xlabel(graph_type_names[id_type], fontsize='14')
     plt.axhline(y=0.01, color="black")
-    #plt.ylim([0, 0.1])
+    plt.ylim([1e-15, 0.5])
     plt.yscale("log")
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{graph_type}.png", 
                 dpi=300)

@@ -60,12 +60,12 @@ for id_type, graph_type in enumerate(graph_types):
 
         # Plot it 
         plt.plot(measure_mean.index, measure_mean.values, 
-                color=color_map(measure_name_id+1),
-                marker=markers[measure_name_id], 
-                label=measure_clean_names[measure_name_id])
+                 color=color_map(measure_name_id+1),
+                 marker=markers[measure_name_id], 
+                 label=measure_clean_names[measure_name_id])
             
-    plt.legend(loc='lower right', fontsize='8')
-    plt.xlabel(graph_type_names[id_type])
+    #plt.legend(loc='lower right', fontsize='8')
+    plt.xlabel(graph_type_names[id_type], fontsize='14')
     plt.ylim((0, 1))
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{graph_type}.png", 
                 dpi=300)
