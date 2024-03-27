@@ -89,25 +89,28 @@ for i, tested_variety in enumerate(tested_varieties):
     variety_ax.plot(ranks, predicted_freq, color=color_map(i), alpha=0.5)
     
 # Update and save plots 
-plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_slopes), 
+slope_cb = plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_slopes), 
                                          np.max(tested_slopes)), 
                                cmap=color_map), ax=slope_ax, label="Power")
-plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_shifts), 
+shift_cb = plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_shifts), 
                                          np.max(tested_shifts)), 
                                cmap=color_map), ax=shift_ax, label="Shift")
-plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_varieties), 
+variety_cb = plt.colorbar(cm.ScalarMappable(Normalize(np.min(tested_varieties), 
                                          np.max(tested_varieties)), 
                                cmap=color_map), ax=variety_ax, label="Variety")
-real_ax.set_xlabel("Rank")
-real_ax.set_ylabel("Frequency")
-esti_ax.set_xlabel("Rank")
-esti_ax.set_ylabel("Frequency")
-slope_ax.set_xlabel("Rank")
-slope_ax.set_ylabel("Frequency")
-shift_ax.set_xlabel("Rank")
-shift_ax.set_ylabel("Frequency")
-variety_ax.set_xlabel("Rank")
-variety_ax.set_ylabel("Frequency")
+slope_cb.set_label("Power", fontsize=14)
+shift_cb.set_label("Shift", fontsize=14)
+variety_cb.set_label("Variety", fontsize=14)
+real_ax.set_xlabel("Rank", fontsize=14)
+real_ax.set_ylabel("Frequency", fontsize=14)
+esti_ax.set_xlabel("Rank", fontsize=14)
+esti_ax.set_ylabel("Frequency", fontsize=14)
+slope_ax.set_xlabel("Rank", fontsize=14)
+slope_ax.set_ylabel("Frequency", fontsize=14)
+shift_ax.set_xlabel("Rank", fontsize=14)
+shift_ax.set_ylabel("Frequency", fontsize=14)
+variety_ax.set_xlabel("Rank", fontsize=14)
+variety_ax.set_ylabel("Frequency", fontsize=14)
 real_ax.set_xscale("log")
 real_ax.set_yscale("log")
 esti_ax.set_xscale("log")
@@ -118,8 +121,13 @@ shift_ax.set_xscale("log")
 shift_ax.set_yscale("log")
 variety_ax.set_xscale("log")
 variety_ax.set_yscale("log")
-real_fig.savefig(f"{output_folder_path}/real_distrib.png", dpi=300)
-esti_fig.savefig(f"{output_folder_path}/interpolated_distrib.png", dpi=300)
-slope_fig.savefig(f"{output_folder_path}/slope_distrib.png", dpi=300)
-shift_fig.savefig(f"{output_folder_path}/shift_distrib.png", dpi=300)
-variety_fig.savefig(f"{output_folder_path}/variety_distrib.png", dpi=300)
+real_fig.savefig(f"{output_folder_path}/real_distrib.png", dpi=300, 
+                 bbox_inches='tight')
+esti_fig.savefig(f"{output_folder_path}/interpolated_distrib.png", dpi=300, 
+                 bbox_inches='tight')
+slope_fig.savefig(f"{output_folder_path}/slope_distrib.png", dpi=300, 
+                  bbox_inches='tight')
+shift_fig.savefig(f"{output_folder_path}/shift_distrib.png", dpi=300, 
+                  bbox_inches='tight')
+variety_fig.savefig(f"{output_folder_path}/variety_distrib.png", dpi=300, 
+                    bbox_inches='tight')
