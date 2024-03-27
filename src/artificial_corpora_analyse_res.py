@@ -64,8 +64,7 @@ for id_type, graph_type in enumerate(graph_types):
                  marker=markers[measure_name_id], 
                  label=measure_clean_names[measure_name_id])
             
-    if graph_type == 'slope':
-        plt.legend(fontsize='12')
+    plt.legend(loc='upper left', fontsize='12')
     plt.xlabel(graph_type_names[id_type], fontsize='14')
     plt.ylim((0, 1))
     plt.savefig(f"{output_folder_path}/{output_file_prefix}_{graph_type}.png", 
