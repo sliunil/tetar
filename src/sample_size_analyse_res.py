@@ -8,7 +8,7 @@ from matplotlib import cm
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_file_path = "../results/sample_size/results_small/small_merge.csv"
+input_file_path = "../results/sample_size/results_large/large_merge.csv"
 output_folder_path = "../results"
 output_file_prefix = "sample_size_plot"
 min_prop_to_compute_mtld = 0.6
