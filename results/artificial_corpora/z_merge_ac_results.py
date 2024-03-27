@@ -5,8 +5,8 @@ import pandas as pd
 # --- SCRIPT PARAMETERS
 # -------------------------------
 
-input_folder_path = "acz_results_3/all_files"
-output_file_path = "acz_results_3/acz_3_merge.csv"
+input_folder_path = "zm_res_1/all_files"
+output_file_path = "zm_res_1/zm_1_merge.csv"
 
 # -------------------------------
 # --- CODE

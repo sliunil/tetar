@@ -69,8 +69,6 @@ for id_type, graph_type in enumerate(graph_types):
                  color=color_map(measure_name_id+1),
                  marker=markers[measure_name_id], 
                  label=measure_clean_names[measure_name_id])
-    if graph_type == 'variety':
-        plt.legend(fontsize='14')
     plt.xlabel(graph_type_names[id_type], fontsize='14')
     plt.axhline(y=0.01, color="black")
     plt.ylim([1e-15, 0.5])
